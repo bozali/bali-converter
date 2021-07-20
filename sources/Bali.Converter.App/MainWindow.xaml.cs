@@ -2,8 +2,11 @@
 {
     using System.Windows;
     using System.Windows.Controls;
+
     using Bali.Converter.App.Modules.MediaDownloader.Views;
+
     using Prism.Regions;
+
     using Unity;
 
     public partial class MainWindow : Window

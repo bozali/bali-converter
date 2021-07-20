@@ -5,14 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bali.Converter.App.Modules.MediaDownloader.Views"
              xmlns:prism="http://prismlibrary.com/"
-             mc:Ignorable="d" 
+             xmlns:vm="clr-namespace:Bali.Converter.App.Modules.MediaDownloader.ViewModels"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:MediaDownloaderViewModel}"
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+
+    <Grid Margin="15">
         <StackPanel Orientation="Vertical">
-            <TextBlock Text="Download Url" />
-            <TextBox />
-            <Button Content="Download" />
+            <TextBlock Margin="0 0 0 5" Text="Download Url" />
+            <TextBox Margin="0 0 0 10" Text="{Binding Url}" />
+            <Button HorizontalAlignment="Left" Content="Download" Width="150" />
         </StackPanel>
     </Grid>
 </UserControl>
