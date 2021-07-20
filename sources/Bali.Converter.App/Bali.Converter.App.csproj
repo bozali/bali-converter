@@ -16,10 +16,23 @@
 
   <ItemGroup>
     <Folder Include="Modules\MediaDownloader\ViewModels\" />
+    <Folder Include="Tools\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Bali.Converter.YoutubeDl\Bali.Converter.YoutubeDl.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Tools\ffmpeg.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Tools\ffprobe.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Tools\youtube-dl.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -45,7 +45,7 @@
                 TargetFormat = format
             };
 
-            if (!this.registry.TryAdd(job.Id, job))
+            if (this.registry.TryAdd(job.Id, job))
             {
                 using var writer = new StreamWriter(Path.Combine(IConfigurationService.ApplicationDataPath, "List.xml"));
 
