@@ -19,10 +19,10 @@
             <Button Click="NavigationButtonClicked" Content="Media Downloader" Tag="MediaDownloaderView" />
             <Button Content="Converter" Tag="MediaDownloaderView" />
             <Button Content="Downloads" Tag="MediaDownloaderView" />
-            <Button Content="Settings" Tag="MediaDownloaderView" />
+            <Button Click="NavigationButtonClicked" Content="Settings" Tag="SettingsView" />
         </StackPanel>
 
 
-        <Frame Grid.Column="1" prism:RegionManager.RegionName="ContentRegion" />
+        <Frame NavigationUIVisibility="Hidden" Grid.Column="1" prism:RegionManager.RegionName="ContentRegion" />
     </Grid>
 </Window>
