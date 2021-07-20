@@ -1,0 +1,28 @@
+﻿<Window x:Class="Bali.Converter.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Bali.Converter.App"
+        xmlns:prism="http://prismlibrary.com/"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" Height="756" Width="1200">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <Button Click="NavigationButtonClicked" Content="Media Downloader" Tag="MediaDownloaderView" />
+            <Button Content="Converter" Tag="MediaDownloaderView" />
+            <Button Content="Downloads" Tag="MediaDownloaderView" />
+            <Button Content="Settings" Tag="MediaDownloaderView" />
+        </StackPanel>
+
+
+        <Frame Grid.Column="1" prism:RegionManager.RegionName="ContentRegion" />
+    </Grid>
+</Window>
