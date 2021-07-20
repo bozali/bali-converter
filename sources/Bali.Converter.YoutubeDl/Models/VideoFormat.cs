@@ -31,7 +31,7 @@
         /// <summary>
         /// Audio sampling rate in Hertz.
         /// </summary>
-        [JsonProperty("asr")]
-        public int AudioSamplingRate { get; set; }
+        // [JsonProperty("asr")]
+        // public int AudioSamplingRate { get; set; }
     }
 }

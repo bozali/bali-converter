@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using Bali.Converter.Common.Enums;
+    using Bali.Converter.Common.Media;
 
     public interface IDownloadRegistry
     {
@@ -14,6 +16,8 @@
 
         Task<DownloadJob> Get();
 
-        void Add(string url, MediaFormat format);
+        void Add(string url, MediaFormat format, MediaTags tags);
+
+        void Remove(Guid id);
     }
 }

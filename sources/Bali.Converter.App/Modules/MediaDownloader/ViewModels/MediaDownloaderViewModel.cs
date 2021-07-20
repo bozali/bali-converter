@@ -1,11 +1,13 @@
 ﻿namespace Bali.Converter.App.Modules.MediaDownloader.ViewModels
 {
     using System;
-
+    using System.Threading.Tasks;
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Modules.MediaDownloader.Views;
     using Bali.Converter.Common.Enums;
-
+    using Bali.Converter.Common.Extensions;
+    using Bali.Converter.Common.Media;
+    using Bali.Converter.YoutubeDl;
     using Prism.Commands;
     using Prism.Mvvm;
     using Prism.Regions;
@@ -14,17 +16,21 @@
     {
         private readonly IRegionManager regionManager;
         private readonly IDownloadRegistry downloadRegistry;
+        private readonly IYoutubeDl youtubedl;
 
         private bool isProcessing;
         private string url;
         private string format;
 
-        public MediaDownloaderViewModel(IRegionManager regionManager, IDownloadRegistry downloadRegistry)
+        public MediaDownloaderViewModel(IRegionManager regionManager,
+                                        IDownloadRegistry downloadRegistry,
+                                        IYoutubeDl youtubedl)
         {
             this.regionManager = regionManager;
             this.downloadRegistry = downloadRegistry;
+            this.youtubedl = youtubedl;
 
-            this.DownloadCommand = new DelegateCommand(this.Download, () => !string.IsNullOrEmpty(this.Url));
+            this.DownloadCommand = new DelegateCommand(async () => await this.Download(), () => !string.IsNullOrEmpty(this.Url));
 
             this.Format = MediaFormat.MP4.ToString();
         }
@@ -69,13 +75,19 @@
         {
         }
 
-        private void Download()
+        private async Task Download()
         {
             try
             {
                 this.IsProcessing = true;
 
-                this.downloadRegistry.Add(this.Url, Enum.Parse<MediaFormat>(this.Format, true));
+                var video = await this.youtubedl.GetVideo(this.Url);
+
+                this.downloadRegistry.Add(this.Url, Enum.Parse<MediaFormat>(this.Format, true), new MediaTags
+                {
+                    Title = video.Title.RemoveIllegalChars(),
+                    Artist = video.Channel
+                });
 
                 this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(MediaDownloaderView));
             }

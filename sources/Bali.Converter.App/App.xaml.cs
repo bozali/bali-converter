@@ -8,6 +8,7 @@
     using Bali.Converter.App.Modules.Settings.ViewModels;
     using Bali.Converter.App.Modules.Settings.Views;
     using Bali.Converter.App.Services;
+    using Bali.Converter.App.Workers;
     using Bali.Converter.YoutubeDl;
 
     using Prism.Ioc;
@@ -25,11 +26,20 @@
 
             containerRegistry.RegisterForNavigation<MediaDownloaderView, MediaDownloaderViewModel>();
             containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();
+
+            containerRegistry.Register<DownloadBackgroundWorker>();
         }
 
         protected override Window CreateShell()
         {
             return this.Container.Resolve<MainWindow>();
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            this.Container.Resolve<DownloadBackgroundWorker>().Process().ConfigureAwait(false);
         }
     }
 }

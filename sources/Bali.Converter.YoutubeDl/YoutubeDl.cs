@@ -5,24 +5,25 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Runtime.Serialization.Json;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Web;
 
     using Bali.Converter.Common;
+    using Bali.Converter.Common.Enums;
     using Bali.Converter.YoutubeDl.Models;
+
     using Newtonsoft.Json;
 
     public class YoutubeDl : IYoutubeDl
     {
-        private readonly string youtubeDl;
+        private readonly string youtubedl;
         private readonly string ffmpeg;
         private readonly string temp;
 
-        public YoutubeDl(string youtubeDl, string ffmpeg, string temp)
+        public YoutubeDl(string youtubedl, string ffmpeg, string temp)
         {
-            this.youtubeDl = youtubeDl;
+            this.youtubedl = youtubedl;
             this.ffmpeg = ffmpeg;
             this.temp = temp;
         }
@@ -47,17 +48,17 @@
 
             string infoFileName = string.Empty;
 
-            using var process = new ProcessWrapper(this.youtubeDl);
+            using var process = new ProcessWrapper(this.youtubedl);
 
             var handler = new DataReceivedEventHandler((s, e) =>
-                                                       {
-                                                           string extracted = YoutubeDl.ExtractFilePath(e.Data);
+            {
+                string extracted = YoutubeDl.ExtractFilePath(e.Data);
 
-                                                           if (!string.IsNullOrEmpty(extracted))
-                                                           {
-                                                               infoFileName = extracted;
-                                                           }
-                                                       });
+                if (!string.IsNullOrEmpty(extracted))
+                {
+                    infoFileName = extracted;
+                }
+            });
 
             process.OutputDataReceived += handler;
 
@@ -70,7 +71,7 @@
 
             try
             {
-                JsonConvert.DeserializeObject<Video>(await reader.ReadToEndAsync());
+                return JsonConvert.DeserializeObject<Video>(await reader.ReadToEndAsync());
             }
             finally
             {
@@ -78,8 +79,25 @@
 
                 new FileInfo(infoPath).Delete();
             }
+            
+        }
 
-            return null;
+        public async Task Download(string url, string path, MediaFormat format)
+        {
+            var arguments = new List<string>();
+            arguments.Add($@"--output ""{path}""");
+            arguments.Add($@"""{url}""");
+            arguments.Add($@"--format best");
+            arguments.Add($@"--no-playlist");
+
+            if (format != MediaFormat.MP4)
+            {
+                arguments.Add($@"--recode-video {format.ToString("G").ToLowerInvariant()}");
+                arguments.Add($@"--ffmpeg-location ""{this.ffmpeg}""");
+            }
+
+            var process = new ProcessWrapper(this.youtubedl);
+            await process.Execute(string.Join(' ', arguments));
         }
 
         private static string ExtractFilePath(string data)

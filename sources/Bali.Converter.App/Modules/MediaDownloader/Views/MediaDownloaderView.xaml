@@ -17,8 +17,8 @@
             <TextBlock Margin="0 0 0 5" Text="Download Url" />
             <TextBox Margin="0 0 0 10" Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" />
 
-            <ComboBox Margin="0 0 0 10" HorizontalAlignment="Left" Width="200" SelectedItem="{Binding Format}"
-                      SelectedIndex="1" IsSynchronizedWithCurrentItem="True">
+            <ComboBox Margin="0 0 0 10" HorizontalAlignment="Left" Width="200" SelectedValue="{Binding Format}"
+                      SelectedValuePath="Content" SelectedIndex="1">
                 <ComboBoxItem Content="MP3" />
                 <ComboBoxItem Content="MP4" />
                 <ComboBoxItem Content="Wav" />
@@ -31,7 +31,7 @@
                 <ComboBoxItem Content="Ogg" />
                 <ComboBoxItem Content="Webm" />
                 <ComboBoxItem Content="Mkv" />
-                <ComboBoxItem Content="Avi" />
+                <ComboBoxItem Content="Avi"  />
             </ComboBox>
 
             <Button HorizontalAlignment="Left" Content="Download" Width="150" Command="{Binding DownloadCommand}" />

@@ -8,8 +8,10 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Xml.Serialization;
+
     using Bali.Converter.App.Services;
     using Bali.Converter.Common.Enums;
+    using Bali.Converter.Common.Media;
 
     public class DownloadRegistry : IDownloadRegistry
     {
@@ -37,12 +39,13 @@
             return found.Value;
         }
         
-        public void Add(string url, MediaFormat format)
+        public void Add(string url, MediaFormat format, MediaTags tags)
         {
             var job = new DownloadJob
             {
                 Url = url,
-                TargetFormat = format
+                TargetFormat = format,
+                Tags = tags
             };
 
             if (this.registry.TryAdd(job.Id, job))
@@ -58,6 +61,22 @@
                 this.semaphore.Release();
 
                 this.OnDownloadJobAdded(new DownloadEventArgs(job));
+            }
+        }
+
+        public void Remove(Guid id)
+        {
+            if (this.registry.TryRemove(id, out var job))
+            {
+                using var writer = new StreamWriter(Path.Combine(IConfigurationService.ApplicationDataPath, "List.xml"));
+
+                var serializer = new XmlSerializer(typeof(DownloadList));
+                serializer.Serialize(writer, new DownloadList
+                {
+                    Jobs = this.registry.Select(p => p.Value).ToList()
+                });
+
+                this.OnDownloadJobRemoved(new DownloadEventArgs(job));
             }
         }
 
