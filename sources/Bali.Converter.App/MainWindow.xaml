@@ -1,13 +1,14 @@
-﻿<Window x:Class="Bali.Converter.App.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Bali.Converter.App"
-        xmlns:prism="http://prismlibrary.com/"
-        mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="756" Width="1200">
+﻿<mah:MetroWindow x:Class="Bali.Converter.App.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:Bali.Converter.App"
+                 xmlns:prism="http://prismlibrary.com/"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 mc:Ignorable="d"
+                 WindowStartupLocation="CenterScreen"
+                 Title="Bali Converter" Height="756" Width="1200">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -25,4 +26,4 @@
 
         <Frame NavigationUIVisibility="Hidden" Grid.Column="1" prism:RegionManager.RegionName="ContentRegion" />
     </Grid>
-</Window>
+</mah:MetroWindow>
