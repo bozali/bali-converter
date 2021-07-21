@@ -2,12 +2,17 @@
 {
     using System;
     using System.IO;
+    using System.Net.Mime;
     using System.Threading;
     using System.Threading.Tasks;
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Services;
     using Bali.Converter.Common.Extensions;
+    using Bali.Converter.Common.Media;
     using Bali.Converter.YoutubeDl;
+    using TagLib;
+    using TagLib.Id3v2;
+    using File = System.IO.File;
 
     public class DownloadBackgroundWorker
     {
@@ -40,6 +45,8 @@
 
                     await this.youtubedl.Download(job.Url, downloadPathPattern, job.TargetFormat);
 
+                    await this.ApplyTags(downloadPath, job.Tags, job.ThumbnailPath);
+
                     File.Move(downloadPath, destinationPath);
 
                     this.downloadRegistry.Remove(job.Id);
@@ -48,6 +55,31 @@
                 {
                 }
             }
+        }
+
+        private async Task ApplyTags(string path, MediaTags tags, string thumbnailPath)
+        {
+            using var file = TagLib.File.Create(path);
+            file.Tag.Title = tags.Title;
+            file.Tag.Album = tags.Album;
+
+            if (!string.IsNullOrEmpty(thumbnailPath))
+            {
+                byte[] data = await File.ReadAllBytesAsync(thumbnailPath);
+
+                file.Tag.Pictures = new IPicture[]
+                {
+                    new AttachedPictureFrame
+                    {
+                        Data = new ByteVector(data),
+                        MimeType = MediaTypeNames.Image.Jpeg,
+                        Type = PictureType.FrontCover,
+                        TextEncoding = StringType.UTF16,
+                    }
+                };
+            }
+
+            file.Save();
         }
     }
 }

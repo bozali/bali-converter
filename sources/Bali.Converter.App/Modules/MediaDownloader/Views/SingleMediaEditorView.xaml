@@ -12,7 +12,7 @@
     <ScrollViewer>
         <Grid Margin="15">
             <StackPanel>
-                <Image Source="{Binding ThumbnailData}" Width="320" Height="180" />
+                <Image HorizontalAlignment="Left" Source="{Binding ThumbnailData}" Width="320" Height="180" />
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Title">
                     <TextBox Text="{Binding MediaTags.Title}" />
@@ -41,7 +41,8 @@
                                        Value="{Binding MediaTags.Year}" />
                 </mah:MetroHeader>
 
-                <Button HorizontalAlignment="Left" Margin="0 20 0 0" Content="Download" Width="150" Command="{Binding DownloadCommand}" />
+                <Button HorizontalAlignment="Left" Margin="0 20 0 0" Content="Download" Width="150"
+                        Command="{Binding DownloadCommand}" />
             </StackPanel>
 
         </Grid>

@@ -6,6 +6,7 @@
     using AutoMapper;
 
     using Bali.Converter.App.Modules.Downloads;
+    using Bali.Converter.App.Modules.MediaDownloader.Views;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Extensions;
     using Bali.Converter.Common.Media;
@@ -17,6 +18,7 @@
 
     public class SingleMediaEditorViewModel : BindableBase, INavigationAware
     {
+        private readonly IRegionManager regionManager;
         private readonly IDownloadRegistry downloadRegistry;
         private readonly IMapper mapper;
 
@@ -26,8 +28,9 @@
         private string thumbnailPath;
         private Video video;
 
-        public SingleMediaEditorViewModel(IDownloadRegistry downloadRegistry, IMapper mapper)
+        public SingleMediaEditorViewModel(IRegionManager regionManager, IDownloadRegistry downloadRegistry, IMapper mapper)
         {
+            this.regionManager = regionManager;
             this.downloadRegistry = downloadRegistry;
             this.mapper = mapper;
 
@@ -65,9 +68,9 @@
 
             this.MediaTags = new MediaTagsViewModel
             {
-                Title = video.Title.RemoveIllegalChars(),
-                Artist = video.Channel,
-                Year = video.UploadDate.Year
+                Title = this.video.Title.RemoveIllegalChars(),
+                Artist = this.video.Channel,
+                Year = this.video.UploadDate.Year
             };
         }
 
@@ -91,6 +94,9 @@
             };
 
             this.downloadRegistry.Add(job);
+
+            this.regionManager.Regions["ContentRegion"].NavigationService.Journal.Clear();
+            this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(MediaDownloaderView));
         }
     }
 }
