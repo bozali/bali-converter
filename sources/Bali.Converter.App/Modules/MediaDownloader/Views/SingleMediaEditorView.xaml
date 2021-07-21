@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="Bali.Converter.App.Modules.MediaDownloader.Views.SingleMediaEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bali.Converter.App.Modules.MediaDownloader.Views"
+             xmlns:vm="clr-namespace:Bali.Converter.App.Modules.MediaDownloader.ViewModels"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:SingleMediaEditorViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <ScrollViewer>
+        <Grid Margin="15">
+            <StackPanel>
+                <Image Source="{Binding ThumbnailData}" Width="320" Height="180" />
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Title">
+                    <TextBox Text="{Binding MediaTags.Title}" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Artist">
+                    <TextBox Text="{Binding MediaTags.Artist}" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Album">
+                    <TextBox Text="{Binding MediaTags.Album}" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Description">
+                    <TextBox Text="{Binding MediaTags.Description}" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Copyright">
+                    <TextBox Text="{Binding MediaTags.Copyright}" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Year">
+                    <mah:NumericUpDown HorizontalAlignment="Left" Width="150"
+                                       ChangeValueOnTextChanged="True"
+                                       NumericInputMode="Numbers"
+                                       Value="{Binding MediaTags.Year}" />
+                </mah:MetroHeader>
+
+                <Button HorizontalAlignment="Left" Margin="0 20 0 0" Content="Download" Width="150" Command="{Binding DownloadCommand}" />
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
+</UserControl>

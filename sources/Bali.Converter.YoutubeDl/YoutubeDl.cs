@@ -14,6 +14,7 @@
     using Bali.Converter.YoutubeDl.Models;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
     public class YoutubeDl : IYoutubeDl
     {
@@ -71,7 +72,8 @@
 
             try
             {
-                return JsonConvert.DeserializeObject<Video>(await reader.ReadToEndAsync());
+                return JsonConvert.DeserializeObject<Video>(await reader.ReadToEndAsync(),
+                                                            new IsoDateTimeConverter { DateTimeFormat = "yyyyMMdd" });
             }
             finally
             {

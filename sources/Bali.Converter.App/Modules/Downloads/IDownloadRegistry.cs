@@ -6,6 +6,7 @@
 
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
+    using Bali.Converter.YoutubeDl.Models;
 
     public interface IDownloadRegistry
     {
@@ -15,8 +16,10 @@
         IEnumerable<DownloadJob> Jobs { get; }
 
         Task<DownloadJob> Get();
-
+        
         void Add(string url, MediaFormat format, MediaTags tags);
+
+        void Add(DownloadJob job);
 
         void Remove(Guid id);
     }

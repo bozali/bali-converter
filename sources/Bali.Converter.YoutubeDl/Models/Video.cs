@@ -35,6 +35,9 @@
         [JsonProperty("duration")]
         public int Duration { get; set; }
 
+        [JsonProperty("upload_date")]
+        public DateTime UploadDate { get; set; }
+
         [JsonProperty("formats")]
         public VideoFormat[] Formats { get; set; }
     }

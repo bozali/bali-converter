@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bali.Converter.App", "sources\Bali.Converter.App\Bali.Converter.App.csproj", "{39FA94FF-3E7C-4299-810C-D35BB25A97F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bali.Converter.App", "sources\Bali.Converter.App\Bali.Converter.App.csproj", "{39FA94FF-3E7C-4299-810C-D35BB25A97F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bali.Converter.YoutubeDl", "sources\Bali.Converter.YoutubeDl\Bali.Converter.YoutubeDl.csproj", "{6E203D7E-1F51-4D82-BCC4-7F8F2A6E32BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bali.Converter.YoutubeDl", "sources\Bali.Converter.YoutubeDl\Bali.Converter.YoutubeDl.csproj", "{6E203D7E-1F51-4D82-BCC4-7F8F2A6E32BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bali.Converter.Common", "sources\Bali.Converter.Common\Bali.Converter.Common.csproj", "{0A67F5C0-D237-49B4-A887-0DBA331D761B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bali.Converter.Common", "sources\Bali.Converter.Common\Bali.Converter.Common.csproj", "{0A67F5C0-D237-49B4-A887-0DBA331D761B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

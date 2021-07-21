@@ -12,6 +12,7 @@
     using Bali.Converter.App.Services;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
+    using Bali.Converter.YoutubeDl.Models;
 
     public class DownloadRegistry : IDownloadRegistry
     {
@@ -62,6 +63,26 @@
 
                 this.OnDownloadJobAdded(new DownloadEventArgs(job));
             }
+        }
+
+        public void Add(DownloadJob job)
+        {
+            if (!this.registry.TryAdd(job.Id, job))
+            {
+                return;
+            }
+
+            using var writer = new StreamWriter(Path.Combine(IConfigurationService.ApplicationDataPath, "List.xml"));
+
+            var serializer = new XmlSerializer(typeof(DownloadList));
+            serializer.Serialize(writer, new DownloadList
+            {
+                Jobs = this.registry.Select(p => p.Value).ToList()
+            });
+
+            this.semaphore.Release();
+
+            this.OnDownloadJobAdded(new DownloadEventArgs(job));
         }
 
         public void Remove(Guid id)

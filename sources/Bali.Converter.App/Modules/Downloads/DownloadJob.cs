@@ -5,7 +5,6 @@
 
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
-    using Bali.Converter.YoutubeDl.Models;
 
     public class DownloadJob
     {
@@ -22,6 +21,9 @@
 
         [XmlAttribute]
         public MediaFormat TargetFormat { get; set; }
+
+        [XmlAttribute]
+        public string ThumbnailPath { get; set; }
 
         [XmlElement]
         public MediaTags Tags { get; set; }

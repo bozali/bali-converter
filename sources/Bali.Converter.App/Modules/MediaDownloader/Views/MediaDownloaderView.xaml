@@ -6,35 +6,42 @@
              xmlns:local="clr-namespace:Bali.Converter.App.Modules.MediaDownloader.Views"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:vm="clr-namespace:Bali.Converter.App.Modules.MediaDownloader.ViewModels"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:MediaDownloaderViewModel}"
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="450" d:DesignWidth="800"
              x:Name="MediaDownloader"
              Style="{DynamicResource MetroPage}">
 
-    <Grid Margin="15 15 15 15">
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Width="{Binding ElementName=MediaDownloader, Path=ActualWidth}">
-            <TextBlock Margin="0 0 0 5" Text="Download Url" />
-            <TextBox Margin="0 0 0 10" Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" />
+    <Grid Margin="15">
+        <StackPanel Orientation="Vertical" >
+            <mah:MetroHeader Margin="0 10 0 0" Header="Download Url">
+                <TextBox Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" />
+            </mah:MetroHeader>
 
-            <ComboBox Margin="0 0 0 10" HorizontalAlignment="Left" Width="200" SelectedValue="{Binding Format}"
-                      SelectedValuePath="Content" SelectedIndex="1">
-                <ComboBoxItem Content="MP3" />
-                <ComboBoxItem Content="MP4" />
-                <ComboBoxItem Content="Wav" />
-                <ComboBoxItem Content="M4a" />
-                <ComboBoxItem Content="Opus" />
-                <ComboBoxItem Content="Vorbis" />
-                <ComboBoxItem Content="Aac" />
-                <ComboBoxItem Content="Flac" />
-                <ComboBoxItem Content="Flv" />
-                <ComboBoxItem Content="Ogg" />
-                <ComboBoxItem Content="Webm" />
-                <ComboBoxItem Content="Mkv" />
-                <ComboBoxItem Content="Avi"  />
-            </ComboBox>
+            <mah:MetroHeader Margin="0 10 0 0" Header="Target Format">
+                <ComboBox HorizontalAlignment="Left" Width="200" SelectedValue="{Binding Format}"
+                          SelectedValuePath="Content" SelectedIndex="1">
+                    <ComboBoxItem Content="MP3" />
+                    <ComboBoxItem Content="MP4" />
+                    <ComboBoxItem Content="Wav" />
+                    <ComboBoxItem Content="M4a" />
+                    <ComboBoxItem Content="Opus" />
+                    <ComboBoxItem Content="Vorbis" />
+                    <ComboBoxItem Content="Aac" />
+                    <ComboBoxItem Content="Flac" />
+                    <ComboBoxItem Content="Flv" />
+                    <ComboBoxItem Content="Ogg" />
+                    <ComboBoxItem Content="Webm" />
+                    <ComboBoxItem Content="Mkv" />
+                    <ComboBoxItem Content="Avi"  />
+                </ComboBox>
+            </mah:MetroHeader>
 
-            <Button HorizontalAlignment="Left" Content="Download" Width="150" Command="{Binding DownloadCommand}" />
+            <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
+                <Button Margin="0 0 10 0" HorizontalAlignment="Left" Content="Edit" Width="150" Command="{Binding EditCommand}" />
+                <Button HorizontalAlignment="Left" Content="Download" Width="150" Command="{Binding DownloadCommand}" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>
