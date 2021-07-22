@@ -10,20 +10,70 @@
                  WindowStartupLocation="CenterScreen"
                  Title="Bali Converter" Height="756" Width="1200">
 
+    <mah:MetroWindow.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="HamburgerMenuItem" DataType="{x:Type mah:HamburgerMenuIconItem}">
+                <DockPanel Height="48" LastChildFill="True">
+                    <ContentControl x:Name="IconPart"
+                                    Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=CompactPaneLength}"
+                                    Content="{Binding Icon}"
+                                    DockPanel.Dock="Left"
+                                    Focusable="False"
+                                    IsTabStop="False" />
+                    <TextBlock x:Name="TextPart" VerticalAlignment="Center" FontSize="16" Text="{Binding Label}" />
+                </DockPanel>
+
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=PanePlacement}" Value="Right">
+                        <Setter TargetName="IconPart" Property="DockPanel.Dock" Value="Right" />
+                        <Setter TargetName="TextPart" Property="Margin" Value="8 0 0 0" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </mah:MetroWindow.Resources>
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="4*" />
-        </Grid.ColumnDefinitions>
+        <mah:TransitioningContentControl Margin="48 0 0 0" prism:RegionManager.RegionName="ContentRegion"
+                                         RestartTransitionOnContentChange="True"
+                                         Transition="LeftReplace" />
 
-        <StackPanel Grid.Column="0">
-            <Button Click="NavigationButtonClicked" Content="Media Downloader" Tag="MediaDownloaderView" />
-            <Button Content="Converter" Tag="MediaDownloaderView" />
-            <Button Content="Downloads" Tag="MediaDownloaderView" />
-            <Button Click="NavigationButtonClicked" Content="Settings" Tag="SettingsView" />
-        </StackPanel>
+        <mah:HamburgerMenu DisplayMode="CompactOverlay"
+                           ItemTemplate="{StaticResource HamburgerMenuItem}"
+                           OptionsItemTemplate="{StaticResource HamburgerMenuItem}"
+                           ItemInvoked="NavigationItemInvoked"
+                           SelectedIndex="0"
+                           x:Name="Menu">
 
+            <mah:HamburgerMenu.ItemsSource>
+                <mah:HamburgerMenuItemCollection>
+                    <mah:HamburgerMenuIconItem Label="Media Downloader" Tag="MediaDownloaderView">
+                        <!--<mah:HamburgerMenuIconItem.Icon>
+                            <Image Source="Assets/Images/play-48.png" Width="32" Height="32" />
+                        </mah:HamburgerMenuIconItem.Icon>-->
+                    </mah:HamburgerMenuIconItem>
+                </mah:HamburgerMenuItemCollection>
+            </mah:HamburgerMenu.ItemsSource>
 
-        <Frame NavigationUIVisibility="Hidden" Grid.Column="1" prism:RegionManager.RegionName="ContentRegion" />
+            <mah:HamburgerMenu.OptionsItemsSource>
+                <mah:HamburgerMenuItemCollection>
+                    <mah:HamburgerMenuGlyphItem Label="Settings" Tag="SettingsView" />
+                </mah:HamburgerMenuItemCollection>
+            </mah:HamburgerMenu.OptionsItemsSource>
+
+            <!--
+            TODO The issue is that prism does not register regions inside DataTemplates...
+                <mah:HamburgerMenu.ContentTemplate>
+                       <Grid>
+                            <mah:TransitioningContentControl RestartTransitionOnContentChange="True"
+                                                                 Transition="Default"
+                                                                 x:Name="MainContentControl" />
+                        </Grid>
+                    </DataTemplate>
+                </mah:HamburgerMenu.ContentTemplate>
+            -->
+
+        </mah:HamburgerMenu>
     </Grid>
 </mah:MetroWindow>
