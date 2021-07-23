@@ -58,6 +58,7 @@
 
             <mah:HamburgerMenu.OptionsItemsSource>
                 <mah:HamburgerMenuItemCollection>
+                    <mah:HamburgerMenuGlyphItem Label="Downloads" Tag="DownloadsView" />
                     <mah:HamburgerMenuGlyphItem Label="Settings" Tag="SettingsView" />
                 </mah:HamburgerMenuItemCollection>
             </mah:HamburgerMenu.OptionsItemsSource>

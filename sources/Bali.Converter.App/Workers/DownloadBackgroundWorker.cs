@@ -1,6 +1,7 @@
 ﻿namespace Bali.Converter.App.Workers
 {
     using System;
+    using System.ComponentModel;
     using System.IO;
     using System.Net.Mime;
     using System.Threading;
@@ -43,7 +44,12 @@
                     string downloadPath = downloadPathPattern.Replace("%(ext)s", job.TargetFormat.ToString().ToLowerInvariant());
                     string destinationPath = Path.Combine(this.configurationService.Configuration.DownloadDir, job.Tags.Title + "." + job.TargetFormat.ToString().ToLowerInvariant());
 
-                    await this.youtubedl.Download(job.Url, downloadPathPattern, job.TargetFormat);
+                    await this.youtubedl.Download(job.Url, downloadPathPattern, job.TargetFormat,
+                                                  (f, s) =>
+                                                  {
+                                                      job.Progress = f;
+                                                      job.ProgressText = s;
+                                                  });
 
                     await this.ApplyTags(downloadPath, job.Tags, job.ThumbnailPath);
 
@@ -53,6 +59,7 @@
                 }
                 catch (Exception e)
                 {
+                    // TODO
                 }
             }
         }

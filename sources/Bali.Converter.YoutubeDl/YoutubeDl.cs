@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
@@ -84,7 +85,7 @@
             
         }
 
-        public async Task Download(string url, string path, MediaFormat format)
+        public async Task Download(string url, string path, MediaFormat format, Action<float, string> progressReport = null)
         {
             var arguments = new List<string>();
             arguments.Add($@"--output ""{path}""");
@@ -98,8 +99,37 @@
                 arguments.Add($@"--ffmpeg-location ""{this.ffmpeg}""");
             }
 
-            var process = new ProcessWrapper(this.youtubedl);
+            var percentageReg = new Regex(@"([^\s]+)\%");
+            var detailsReg = new Regex(@"(?<=\[download\])(.*)(?=ETA)");
+
+            void OnOutputDataReceived(object s, DataReceivedEventArgs e)
+            {
+                Debug.WriteLine(e.Data);
+
+                if (string.IsNullOrEmpty(e.Data) || !e.Data.Contains("[download]") || !e.Data.Contains("ETA"))
+                {
+                    return;
+                }
+                
+                string progressStr = percentageReg.Match(e.Data).Groups[1].ToString();
+                float progress = Convert.ToSingle(progressStr, CultureInfo.InvariantCulture);
+                string details = detailsReg.Match(e.Data).ToString().Trim();
+
+                var doubleSpaceReg = new Regex("[ ]{2,}", RegexOptions.None);
+                details = doubleSpaceReg.Replace(details, " ");
+
+                progressReport?.Invoke(progress, details);
+            }
+            
+            using var process = new ProcessWrapper(this.youtubedl);
+
+            process.OutputDataReceived += OnOutputDataReceived;
+            process.ErrorDataReceived += OnOutputDataReceived;
+
             await process.Execute(string.Join(' ', arguments));
+
+            process.OutputDataReceived -= OnOutputDataReceived;
+            process.ErrorDataReceived -= OnOutputDataReceived;
         }
 
         private static string ExtractFilePath(string data)

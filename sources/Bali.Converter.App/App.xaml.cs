@@ -1,8 +1,12 @@
 ﻿namespace Bali.Converter.App
 {
     using System.Windows;
+
     using AutoMapper;
+
     using Bali.Converter.App.Modules.Downloads;
+    using Bali.Converter.App.Modules.Downloads.ViewModels;
+    using Bali.Converter.App.Modules.Downloads.Views;
     using Bali.Converter.App.Modules.MediaDownloader.ViewModels;
     using Bali.Converter.App.Modules.MediaDownloader.Views;
     using Bali.Converter.App.Modules.Settings.ViewModels;
@@ -29,6 +33,7 @@
 
             containerRegistry.RegisterForNavigation<MediaDownloaderView, MediaDownloaderViewModel>();
             containerRegistry.RegisterForNavigation<SingleMediaEditorView, SingleMediaEditorViewModel>();
+            containerRegistry.RegisterForNavigation<DownloadsView, DownloadsViewModel>();
             containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();
 
             containerRegistry.Register<DownloadBackgroundWorker>();

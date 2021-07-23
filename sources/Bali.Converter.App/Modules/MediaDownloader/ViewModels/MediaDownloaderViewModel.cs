@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@
     using Bali.Converter.Common.Media;
     using Bali.Converter.YoutubeDl;
     using Bali.Converter.YoutubeDl.Models;
+
     using ImageMagick;
 
     using Prism.Commands;
@@ -89,6 +91,7 @@
                 {
                     ThumbnailPath = await this.DownloadThumbnail(video),
                     TargetFormat = Enum.Parse<MediaFormat>(this.Format, true),
+                    Url = this.Url,
                     Tags = new MediaTags
                     {
                         Title = video.Title.RemoveIllegalChars(),
@@ -131,23 +134,37 @@
         private async Task<string> DownloadThumbnail(Video video)
         {
             var client = new WebClient();
+
             byte[] thumbnailData = await client.DownloadDataTaskAsync(video.ThumbnailUrl);
 
+            var thumbnailUri = new Uri(video.ThumbnailUrl);
+            string file = thumbnailUri.Segments.Last();
+
             // ReSharper disable once PossibleNullReferenceException
-            string extension = Path.GetExtension(video.ThumbnailUrl).Replace(".", string.Empty);
-            using var image = new MagickImage(thumbnailData, Enum.Parse<MagickFormat>(extension, true));
+            string extension = Path.GetExtension(file).Replace(".", string.Empty);
+            
+            var destinationThumbnailFile = new FileInfo(Path.Combine(IConfigurationService.TempPath, "Thumbnails", Guid.NewGuid() + ".jpg"));
 
-            var thumbnailFile = new FileInfo(Path.Combine(IConfigurationService.TempPath, "Thumbnails", Guid.NewGuid() + ".jpg"));
-
-            if (thumbnailFile.Directory is { Exists: false })
+            if (destinationThumbnailFile.Directory is { Exists: false })
             {
-                thumbnailFile.Directory.Create();
+                destinationThumbnailFile.Directory.Create();
             }
 
-            await using var stream = thumbnailFile.OpenWrite();
-            await image.WriteAsync(stream, MagickFormat.Jpeg);
+            await using var stream = destinationThumbnailFile.OpenWrite();
 
-            return thumbnailFile.FullName;
+            // If we have already jpg/jpeg we just write the file and don't recode it.
+            if (string.Equals(extension, "jpeg", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(extension, "jpg", StringComparison.OrdinalIgnoreCase))
+            {
+                await stream.WriteAsync(thumbnailData);
+            }
+            else
+            {
+                using var image = new MagickImage(thumbnailData, Enum.Parse<MagickFormat>(extension, true));
+                await image.WriteAsync(stream, MagickFormat.Jpeg);
+            }
+
+            return destinationThumbnailFile.FullName;
         }
     }
 }
