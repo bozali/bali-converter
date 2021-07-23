@@ -11,8 +11,16 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
     <ScrollViewer Margin="15" VerticalScrollBarVisibility="Auto">
         <Grid>
+            <TextBlock Text="There are currently no downloads queued."
+                       FontSize="14" TextWrapping="Wrap"
+                       Visibility="{Binding IsDownloadsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
             <ItemsControl ItemsSource="{Binding DownloadJobs}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

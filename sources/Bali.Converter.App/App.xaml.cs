@@ -15,7 +15,7 @@
     using Bali.Converter.App.Services;
     using Bali.Converter.App.Workers;
     using Bali.Converter.YoutubeDl;
-
+    using MahApps.Metro.Controls.Dialogs;
     using Prism.Ioc;
     using Prism.Unity;
 
@@ -26,6 +26,7 @@
             IYoutubeDl youtubedl = new YoutubeDl(@"Tools\youtube-dl.exe", @"Tools\ffmpeg.exe", IConfigurationService.TempPath);
             var mapper = new MapperConfiguration(configuration => configuration.AddProfile<AutoMapperProfile>()).CreateMapper();
 
+            containerRegistry.RegisterInstance(DialogCoordinator.Instance);
             containerRegistry.RegisterInstance(youtubedl);
             containerRegistry.RegisterInstance(mapper);
             containerRegistry.RegisterSingleton<IConfigurationService, ConfigurationService>();

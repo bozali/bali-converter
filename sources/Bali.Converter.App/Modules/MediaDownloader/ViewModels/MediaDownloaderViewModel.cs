@@ -16,7 +16,7 @@
     using Bali.Converter.YoutubeDl.Models;
 
     using ImageMagick;
-
+    using MahApps.Metro.Controls.Dialogs;
     using Prism.Commands;
     using Prism.Mvvm;
     using Prism.Regions;
@@ -25,6 +25,7 @@
     {
         private readonly IRegionManager regionManager;
         private readonly IDownloadRegistry downloadRegistry;
+        private readonly IDialogCoordinator dialog;
         private readonly IYoutubeDl youtubedl;
 
         private string url;
@@ -32,10 +33,12 @@
 
         public MediaDownloaderViewModel(IRegionManager regionManager,
                                         IDownloadRegistry downloadRegistry,
+                                        IDialogCoordinator dialog,
                                         IYoutubeDl youtubedl)
         {
             this.regionManager = regionManager;
             this.downloadRegistry = downloadRegistry;
+            this.dialog = dialog;
             this.youtubedl = youtubedl;
 
             this.DownloadCommand = new DelegateCommand(async () => await this.Download(), () => !string.IsNullOrEmpty(this.Url));
@@ -83,6 +86,8 @@
 
         private async Task Download()
         {
+            var controller = await this.dialog.ShowProgressAsync(this, "Progress", "Please wait a second...");
+
             try
             {
                 var video = await this.youtubedl.GetVideo(this.Url);
@@ -110,11 +115,14 @@
             }
             finally
             {
+                await controller.CloseAsync();
             }
         }
 
         private async Task Edit()
         {
+            var controller = await this.dialog.ShowProgressAsync(this, "Progress", "Please wait a second...");
+
             try
             {
                 var video = await this.youtubedl.GetVideo(this.Url);
@@ -128,6 +136,11 @@
             }
             catch (Exception e)
             {
+                // TODO Catch error and log them
+            }
+            finally
+            {
+                await controller.CloseAsync();
             }
         }
 
