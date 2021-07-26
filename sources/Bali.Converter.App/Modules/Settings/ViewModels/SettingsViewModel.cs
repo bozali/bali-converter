@@ -27,9 +27,9 @@
             this.RaisePropertyChanged();
         }
 
-        public ICommand SaveCommand { get; }
+        public DelegateCommand SaveCommand { get; }
 
-        public ICommand SelectDownloadDirCommand { get; }
+        public DelegateCommand SelectDownloadDirCommand { get; }
 
         public string DownloadDir
         {
@@ -39,6 +39,7 @@
                 if (this.SetProperty(ref this.downloadDir, value))
                 {
                     this.RaisePropertyChanged(nameof(this.HasChanges));
+                    this.SaveCommand?.RaiseCanExecuteChanged();
                 }
             }
         }
