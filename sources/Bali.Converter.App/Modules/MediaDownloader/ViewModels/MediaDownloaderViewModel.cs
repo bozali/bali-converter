@@ -9,6 +9,7 @@
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Modules.MediaDownloader.Views;
     using Bali.Converter.App.Services;
+    using Bali.Converter.Common;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Extensions;
     using Bali.Converter.Common.Media;
@@ -16,13 +17,19 @@
     using Bali.Converter.YoutubeDl.Models;
 
     using ImageMagick;
+
+    using log4net;
+
     using MahApps.Metro.Controls.Dialogs;
+
     using Prism.Commands;
     using Prism.Mvvm;
     using Prism.Regions;
 
     public class MediaDownloaderViewModel : BindableBase, INavigationAware
     {
+        private readonly ILog logger = LogManager.GetLogger(Constants.ApplicationLogger);
+
         private readonly IRegionManager regionManager;
         private readonly IDownloadRegistry downloadRegistry;
         private readonly IDialogCoordinator dialog;
@@ -111,7 +118,7 @@
             }
             catch (Exception e)
             {
-                // TODO Catch error and log them
+                this.logger.Error($"{nameof(MediaDownloaderViewModel)} had an error while downloading.", e);
             }
             finally
             {
@@ -136,7 +143,7 @@
             }
             catch (Exception e)
             {
-                // TODO Catch error and log them
+                this.logger.Error($"{nameof(MediaDownloaderViewModel)} had an error while editing.", e);
             }
             finally
             {

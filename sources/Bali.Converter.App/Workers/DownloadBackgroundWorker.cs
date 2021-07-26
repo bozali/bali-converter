@@ -1,23 +1,25 @@
 ﻿namespace Bali.Converter.App.Workers
 {
     using System;
-    using System.ComponentModel;
     using System.IO;
-    using System.Linq;
     using System.Net.Mime;
     using System.Threading;
     using System.Threading.Tasks;
+
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Services;
-    using Bali.Converter.Common.Extensions;
+    using Bali.Converter.Common;
     using Bali.Converter.Common.Media;
     using Bali.Converter.YoutubeDl;
+    using log4net;
     using TagLib;
     using TagLib.Id3v2;
+
     using File = System.IO.File;
 
     public class DownloadBackgroundWorker
     {
+        private readonly ILog logger = LogManager.GetLogger(Constants.DownloadServiceLogger);
         private readonly IConfigurationService configurationService;
         private readonly IDownloadRegistry downloadRegistry;
         private readonly IYoutubeDl youtubedl;
@@ -41,9 +43,16 @@
                 {
                     job = await this.downloadRegistry.Get();
 
+                    this.logger.Info($"Processing {job.Id} target format {job.TargetFormat}");
+
                     string downloadPathPattern = Path.Combine(IConfigurationService.TempPath, $"{job.Id:N}.%(ext)s");
                     string downloadPath = downloadPathPattern.Replace("%(ext)s", job.TargetFormat.ToString().ToLowerInvariant());
                     string destinationPath = Path.Combine(this.configurationService.Configuration.DownloadDir, job.Tags.Title + "." + job.TargetFormat.ToString().ToLowerInvariant());
+
+                    this.logger.Debug($"Downloading parameters:");
+                    this.logger.Debug($"Pattern Path: {downloadPathPattern}");
+                    this.logger.Debug($"Download Path: {downloadPath}");
+                    this.logger.Debug($"Destination Path: {destinationPath}");
 
                     await this.youtubedl.Download(job.Url, downloadPathPattern, job.TargetFormat,
                                                   (f, s) =>
@@ -67,6 +76,8 @@
 
         private async Task ApplyTags(string path, MediaTags tags, string thumbnailPath)
         {
+            this.logger.Info($"Applying tags to {path}");
+
             using var file = TagLib.File.Create(path);
             file.Tag.Title = tags.Title;
             file.Tag.Album = tags.Album;

@@ -10,12 +10,16 @@
     using System.Xml.Serialization;
 
     using Bali.Converter.App.Services;
+    using Bali.Converter.Common;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
     using Bali.Converter.YoutubeDl.Models;
+    using log4net;
 
     public class DownloadRegistry : IDownloadRegistry
     {
+        private ILog logger = LogManager.GetLogger(Constants.DownloadServiceLogger);
+
         private ConcurrentDictionary<Guid, DownloadJob> registry;
         private SemaphoreSlim semaphore;
 
@@ -143,15 +147,18 @@
 
         protected virtual void OnDownloadJobAdded(DownloadEventArgs e)
         {
+            this.logger.Info($"Download job added: {e.Job.Id} - {e.Job.Url}");
+
             var handler = this.DownloadJobAdded;
             handler?.Invoke(this, e);
         }
 
         protected virtual void OnDownloadJobRemoved(DownloadEventArgs e)
         {
+            this.logger.Info($"Download job removed: {e.Job.Id} - {e.Job.Url}");
+
             var handler = this.DownloadJobRemoved;
             handler?.Invoke(this, e);
         }
-
     }
 }

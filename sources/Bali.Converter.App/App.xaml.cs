@@ -1,5 +1,7 @@
 ﻿namespace Bali.Converter.App
 {
+    using System.IO;
+    using System.Reflection;
     using System.Windows;
 
     using AutoMapper;
@@ -15,6 +17,8 @@
     using Bali.Converter.App.Services;
     using Bali.Converter.App.Workers;
     using Bali.Converter.YoutubeDl;
+    using log4net;
+    using log4net.Config;
     using MahApps.Metro.Controls.Dialogs;
     using Prism.Ioc;
     using Prism.Unity;
@@ -23,6 +27,9 @@
     {
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            var repository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
+
             IYoutubeDl youtubedl = new YoutubeDl(@"Tools\youtube-dl.exe", @"Tools\ffmpeg.exe", IConfigurationService.TempPath);
             var mapper = new MapperConfiguration(configuration => configuration.AddProfile<AutoMapperProfile>()).CreateMapper();
 
