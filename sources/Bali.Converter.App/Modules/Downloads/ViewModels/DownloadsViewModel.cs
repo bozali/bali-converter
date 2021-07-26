@@ -3,9 +3,12 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.Linq;
+
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Extensions;
     using Bali.Converter.Common.Media;
+
+    using Prism.Commands;
     using Prism.Mvvm;
 
     public class DownloadsViewModel : BindableBase
@@ -25,8 +28,31 @@
             
             this.downloadRegistry.DownloadJobAdded += this.OnDownloadJobAdded;
             this.downloadRegistry.DownloadJobRemoved += this.OnDownloadJobRemoved;
+
+            this.DownloadJobs.Add(new DownloadJobViewModel(new DownloadJob
+            {
+                Url = "http://www.youtube.de",
+                Progress = 44.0f,
+                ProgressText = "Some progress text",
+                Tags = new MediaTags
+                {
+                    Title = "Sometitle",
+                    AlbumArtists = "My Album",
+                    Year = 2001,
+                    Copyright = "Public"
+                },
+                TargetFormat = MediaFormat.MP4
+            }));
+
+            this.SelectItemCommand = new DelegateCommand<DownloadJobViewModel>(job =>
+                                                                               {
+                                                                                   job.IsSelected = !job.IsSelected;
+                                                                                   this.DownloadJobs.Except(new[] { job }).ForEach(c => c.IsSelected = false);
+                                                                               });
         }
-        
+
+        public DelegateCommand<DownloadJobViewModel> SelectItemCommand { get; }
+
         public ObservableCollection<DownloadJobViewModel> DownloadJobs
         {
             get => this.downloadJobs;

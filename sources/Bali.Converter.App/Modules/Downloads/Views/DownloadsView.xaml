@@ -9,7 +9,8 @@
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:DownloadsViewModel}" 
              prism:ViewModelLocator.AutoWireViewModel="True"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             x:Name="Root">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -30,10 +31,14 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate d:DataContext="{d:DesignInstance vm:DownloadJobViewModel}">
-                        <Border Padding="5 15 15 15">
+                        <Border Padding="15 15 15 15">
                             <Border.Style>
                                 <Style TargetType="{x:Type Border}">
                                     <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource MahApps.Brushes.SystemControlHighlightListAccentMedium}" />
+                                        </DataTrigger>
+
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Background" Value="{StaticResource MahApps.Brushes.SystemControlHighlightListAccentMedium}" />
                                         </Trigger>
@@ -41,8 +46,22 @@
                                 </Style>
                             </Border.Style>
 
+                            <Border.InputBindings>
+                                <MouseBinding MouseAction="LeftClick"
+                                              Command="{Binding ElementName=Root, Path=DataContext.SelectItemCommand}"
+                                              CommandParameter="{Binding}" />
+                            </Border.InputBindings>
+
+                            <Border.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Pause" />
+                                    <MenuItem Header="Cancel" />
+                                </ContextMenu>
+                            </Border.ContextMenu>
+
                             <Grid>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition />
                                     <RowDefinition />
                                     <RowDefinition />
                                     <RowDefinition />
@@ -50,7 +69,42 @@
 
                                 <mah:MetroHeader Margin="0 0 0 10" Grid.Row="0" Header="{Binding HeaderText}" />
                                 <mah:MetroProgressBar Margin="0 0 0 10" Grid.Row="1" Minimum="0" Maximum="100" Value="{Binding Progress}" Height="12" />
-                                <TextBlock Grid.Row="2" Text="{Binding ProgressText}" />
+                                <mah:MetroHeader Margin="0 0 0 10" Grid.Row="2" Header="{Binding ProgressText}" />
+
+                                <Grid Grid.Row="3" HorizontalAlignment="Left" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition MinWidth="30" Width="30" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Album" />
+                                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Artist" />
+                                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Comment" />
+                                    <TextBlock Grid.Column="0" Grid.Row="3" Text="Copyright" />
+                                    <TextBlock Grid.Column="0" Grid.Row="4" Text="Year" />
+
+                                    <!-- TODO Is there a better solution for this? Maybe with StringFormat? -->
+                                    <TextBlock Grid.Column="1" Grid.Row="0" Text=":" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Grid.Row="1" Text=":" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Grid.Row="2" Text=":" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Grid.Row="3" Text=":" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Grid.Row="4" Text=":" HorizontalAlignment="Center" />
+
+                                    <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Tags.Album, TargetNullValue='-'}" />
+                                    <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding Tags.Artist, TargetNullValue='-'}" />
+                                    <TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding Tags.Comment, TargetNullValue='-'}" />
+                                    <TextBlock Grid.Column="2" Grid.Row="3" Text="{Binding Tags.Copyright, TargetNullValue='-'}" />
+                                    <TextBlock Grid.Column="2" Grid.Row="4" Text="{Binding Tags.Year, TargetNullValue='-'}" />
+                                </Grid>
                             </Grid>
                         </Border>
                     </DataTemplate>

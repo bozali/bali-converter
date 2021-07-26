@@ -72,10 +72,10 @@
             file.Tag.Album = tags.Album;
             file.Tag.Comment = tags.Comment;
             file.Tag.Copyright = tags.Copyright;
-            file.Tag.AlbumArtists = tags.AlbumArtists.Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.TrimEntries);
-            file.Tag.Performers = tags.Performers.Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.TrimEntries);
-            file.Tag.Composers = tags.Composers.Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.TrimEntries);
-            file.Tag.Genres = tags.Genres.Split(";", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            file.Tag.AlbumArtists = tags.AlbumArtists?.Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.TrimEntries);
+            file.Tag.Performers = tags.Performers?.Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.TrimEntries);
+            file.Tag.Composers = tags.Composers?.Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.TrimEntries);
+            file.Tag.Genres = tags.Genres?.Split(";", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
             if (!string.IsNullOrEmpty(thumbnailPath))
             {

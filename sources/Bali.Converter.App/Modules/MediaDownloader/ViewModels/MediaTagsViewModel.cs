@@ -1,13 +1,7 @@
 ﻿namespace Bali.Converter.App.Modules.MediaDownloader.ViewModels
 {
-    using System;
-    using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Runtime.CompilerServices;
-    using System.Security.RightsManagement;
-    using System.Xml.Serialization;
-    using Prism.Commands;
+
     using Prism.Mvvm;
 
     public class MediaTagsViewModel : BindableBase, IDataErrorInfo
