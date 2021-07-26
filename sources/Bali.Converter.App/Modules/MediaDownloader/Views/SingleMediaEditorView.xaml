@@ -15,7 +15,7 @@
                 <Image HorizontalAlignment="Left" Source="{Binding ThumbnailData}" Width="320" Height="180" />
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Title">
-                    <TextBox Text="{Binding MediaTags.Title}" />
+                    <TextBox Text="{Binding MediaTags.Title, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}" />
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Artist">
@@ -26,13 +26,39 @@
                     <TextBox Text="{Binding MediaTags.Album}" />
                 </mah:MetroHeader>
 
-                <mah:MetroHeader Margin="0 10 0 0" Header="Description">
-                    <TextBox Text="{Binding MediaTags.Description}" />
+                <mah:MetroHeader Margin="0 10 0 0" Header="Comment">
+                    <TextBox Text="{Binding MediaTags.Comment}" />
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Copyright">
                     <TextBox Text="{Binding MediaTags.Copyright}" />
                 </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Album Artists">
+                    <TextBox Text="{Binding MediaTags.AlbumArtists}"
+                             mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Genres">
+                    <TextBox Text="{Binding MediaTags.Genres}"
+                             mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Performers">
+                    <TextBox Text="{Binding MediaTags.Performers}"
+                             mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Composers">
+                    <TextBox Text="{Binding MediaTags.Composers}"
+                             mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
+                </mah:MetroHeader>
+
+                <Border>
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick"  />
+                    </Border.InputBindings>
+                </Border>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Year">
                     <mah:NumericUpDown HorizontalAlignment="Left" Width="150"

@@ -64,7 +64,7 @@
             this.Format = navigationContext.Parameters.GetValue<string>("Format");
 
             this.thumbnailPath = navigationContext.Parameters.GetValue<string>("ThumbnailPath");
-            this.ThumbnailData = File.ReadAllBytes(thumbnailPath);
+            this.ThumbnailData = File.ReadAllBytes(this.thumbnailPath);
 
             this.MediaTags = new MediaTagsViewModel
             {

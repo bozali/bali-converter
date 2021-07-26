@@ -1,81 +1,103 @@
 ﻿namespace Bali.Converter.App.Modules.MediaDownloader.ViewModels
 {
+    using System;
     using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Runtime.CompilerServices;
+    using System.Security.RightsManagement;
     using System.Xml.Serialization;
-
+    using Prism.Commands;
     using Prism.Mvvm;
 
-    public class MediaTagsViewModel : BindableBase
+    public class MediaTagsViewModel : BindableBase, IDataErrorInfo
     {
         private string title;
         private string artist;
         private string album;
-        private string description;
+        private string comment;
         private string copyright;
         private int year;
-        private ObservableCollection<string> genres;
-        private ObservableCollection<string> performers;
+        private string albumArtists;
+        private string composers;
+        private string genres;
+        private string performers;
 
-        public MediaTagsViewModel()
-        {
-            this.Genres = new ObservableCollection<string>();
-            this.Performers = new ObservableCollection<string>();
-        }
+        private string collectionInput;
 
-        [XmlAttribute]
         public string Title
         {
             get => this.title;
             set => this.SetProperty(ref this.title, value);
         }
 
-        [XmlAttribute]
         public string Artist
         {
             get => this.artist;
             set => this.SetProperty(ref this.artist, value);
         }
 
-        [XmlAttribute]
         public string Album
         {
             get => this.album;
             set => this.SetProperty(ref this.album, value);
         }
 
-        [XmlAttribute]
-        public string Description
+        public string Comment
         {
-            get => this.description;
-            set => this.SetProperty(ref this.description, value);
+            get => this.comment;
+            set => this.SetProperty(ref this.comment, value);
         }
 
-        [XmlAttribute]
         public string Copyright
         {
             get => this.copyright;
             set => this.SetProperty(ref this.copyright, value);
         }
 
-        [XmlAttribute]
         public int Year
         {
             get => this.year;
             set => this.SetProperty(ref this.year, value);
         }
 
-        [XmlElement("Genres")]
-        public ObservableCollection<string> Genres
+        public string AlbumArtists
+        {
+            get => this.albumArtists;
+            set => this.SetProperty(ref this.albumArtists, value);
+        }
+
+        public string Genres
         {
             get => this.genres;
             set => this.SetProperty(ref this.genres, value);
         }
 
-        [XmlElement("Performers")]
-        public ObservableCollection<string> Performers
+        public string Performers
         {
             get => this.performers;
             set => this.SetProperty(ref this.performers, value);
+        }
+
+        public string Composers
+        {
+            get => this.composers;
+            set => this.SetProperty(ref this.composers, value);
+        }
+
+        public string Error => string.Empty;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                if (columnName == nameof(this.Title) && string.IsNullOrEmpty(this.Title))
+                {
+                    return "Title cannot be empty.";
+                }
+
+                return null;
+            }
         }
     }
 }

@@ -37,7 +37,7 @@
     <Grid>
         <mah:TransitioningContentControl Margin="48 0 0 0" prism:RegionManager.RegionName="ContentRegion"
                                          RestartTransitionOnContentChange="True"
-                                         Transition="LeftReplace" />
+                                         Transition="Up" />
 
         <mah:HamburgerMenu DisplayMode="CompactOverlay"
                            ItemTemplate="{StaticResource HamburgerMenuItem}"
