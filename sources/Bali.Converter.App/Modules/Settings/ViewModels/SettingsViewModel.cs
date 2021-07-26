@@ -23,6 +23,8 @@
 
             this.SaveCommand = new DelegateCommand(this.Save, () => this.HasChanges);
             this.SelectDownloadDirCommand = new DelegateCommand(this.SelectDownloadDir);
+
+            this.RaisePropertyChanged();
         }
 
         public ICommand SaveCommand { get; }
