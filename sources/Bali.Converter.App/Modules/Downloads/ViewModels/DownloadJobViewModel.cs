@@ -1,10 +1,10 @@
 ﻿namespace Bali.Converter.App.Modules.Downloads.ViewModels
 {
     using System;
-    using System.ComponentModel;
 
-    using Bali.Converter.App.Modules.MediaDownloader.ViewModels;
+    using Bali.Converter.App.Events;
     using Bali.Converter.Common.Media;
+
     using Prism.Commands;
     using Prism.Mvvm;
 
@@ -23,7 +23,7 @@
         public DownloadJobViewModel(DownloadJob job)
         {
             this.job = job;
-            this.job.PropertyChanged += this.OnModelPropertyChanged;
+            this.job.DownloadProgressChanged += this.OnDownloadProgressChanged;
 
             this.HeaderText = this.job.Tags.Title;
             this.ProgressText = "Pending";
@@ -39,7 +39,7 @@
             //    Copyright = 
             //};
 
-            this.RequestCancelCommand = new DelegateCommand(() => { });
+            this.RequestCancelCommand = new DelegateCommand(() => this.job.State = DownloadState.Canceled);
         }
 
         public DelegateCommand RequestCancelCommand { get; }
@@ -81,17 +81,10 @@
             get => this.job.Tags;
         }
 
-        private void OnModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            switch (e.PropertyName)
-            {
-                case "ProgressText":
-                    this.ProgressText = ((DownloadJob)sender).ProgressText;
-                    break;
-                case "Progress":
-                    this.Progress = ((DownloadJob)sender).Progress;
-                    break;
-            }
+            this.Progress = e.Progress;
+            this.ProgressText = e.Text;
         }
     }
 }

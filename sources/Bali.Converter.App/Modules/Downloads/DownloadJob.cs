@@ -1,26 +1,25 @@
 ﻿namespace Bali.Converter.App.Modules.Downloads
 {
     using System;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
-    using System.Windows;
     using System.Xml.Serialization;
 
-    using Bali.Converter.App.Annotations;
+    using Bali.Converter.App.Events;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
 
-    public class DownloadJob : INotifyPropertyChanged
+    public class DownloadJob
     {
         private float progress;
         private string progressText;
+        private DownloadState state;
 
         public DownloadJob()
         {
             this.Id = Guid.NewGuid();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event DownloadStateChangedEventHandler DownloadStateEventChanged;
+        public event DownloadProgressChangedEventHandler DownloadProgressChanged;
 
         [XmlAttribute]
         public Guid Id { get; set; }
@@ -34,6 +33,18 @@
         [XmlAttribute]
         public string ThumbnailPath { get; set; }
 
+        public DownloadState State
+        {
+            get => this.state;
+            set
+            {
+                this.state = value;
+                this.ProgressText = this.state.ToString("G");
+
+                this.OnStateChanged(this.state);
+            }
+        }
+
         [XmlElement]
         public MediaTags Tags { get; set; }
 
@@ -44,7 +55,7 @@
             set
             {
                 this.progressText = value;
-                this.OnPropertyChanged();
+                this.OnProgressChanged(this.Progress, this.ProgressText);
             }
         }
 
@@ -55,14 +66,18 @@
             set
             {
                 this.progress = value;
-                this.OnPropertyChanged();
+                this.OnProgressChanged(this.Progress, this.ProgressText);
             }
         }
-        
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+
+        protected virtual void OnProgressChanged(float progress, string text)
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.DownloadProgressChanged?.Invoke(this, new DownloadProgressChangedEventArgs(progress, text));
+        }
+
+        protected virtual void OnStateChanged(DownloadState state)
+        {
+            this.DownloadStateEventChanged?.Invoke(this, new DownloadStateChangedEventArgs(state));
         }
     }
 }

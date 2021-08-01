@@ -7,6 +7,7 @@
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Web;
 
@@ -85,7 +86,7 @@
             
         }
 
-        public async Task Download(string url, string path, MediaFormat format, Action<float, string> progressReport = null)
+        public async Task Download(string url, string path, MediaFormat format, Action<float, string> progressReport = null, CancellationToken ct = default)
         {
             var arguments = new List<string>();
             arguments.Add($@"--output ""{path}""");
@@ -126,7 +127,7 @@
             process.OutputDataReceived += OnOutputDataReceived;
             process.ErrorDataReceived += OnOutputDataReceived;
 
-            await process.Execute(string.Join(' ', arguments));
+            await process.Execute(string.Join(' ', arguments), ct);
 
             process.OutputDataReceived -= OnOutputDataReceived;
             process.ErrorDataReceived -= OnOutputDataReceived;

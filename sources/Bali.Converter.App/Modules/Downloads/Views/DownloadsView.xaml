@@ -55,7 +55,7 @@
                             <Border.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Pause" />
-                                    <MenuItem Header="Cancel" />
+                                    <MenuItem Header="Cancel" Command="{Binding RequestCancelCommand}" />
                                 </ContextMenu>
                             </Border.ContextMenu>
 
@@ -65,13 +65,19 @@
                                     <RowDefinition />
                                     <RowDefinition />
                                     <RowDefinition />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
 
                                 <mah:MetroHeader Margin="0 0 0 10" Grid.Row="0" Header="{Binding HeaderText}" />
                                 <mah:MetroProgressBar Margin="0 0 0 10" Grid.Row="1" Minimum="0" Maximum="100" Value="{Binding Progress}" Height="12" />
-                                <mah:MetroHeader Margin="0 0 0 10" Grid.Row="2" Header="{Binding ProgressText}" />
+                                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                                    <Button Margin="0 0 10 0" Content="Pause" Width="150" />
+                                    <Button Content="Cancel" Width="150" Command="{Binding RequestCancelCommand}" />
+                                </StackPanel>
 
-                                <Grid Grid.Row="3" HorizontalAlignment="Left" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <mah:MetroHeader Margin="0 10 0 10" Grid.Row="3" Header="{Binding ProgressText}" />
+
+                                <Grid Grid.Row="4" HorizontalAlignment="Left" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
                                         <ColumnDefinition MinWidth="30" Width="30" />
