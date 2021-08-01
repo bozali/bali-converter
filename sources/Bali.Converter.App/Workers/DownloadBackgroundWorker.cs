@@ -51,7 +51,7 @@
                     void OnDownloadStateChanged(object s, DownloadStateChangedEventArgs e)
                     {
                         // ReSharper disable once AccessToDisposedClosure
-                        if (e.State == DownloadState.Canceled && cts is { IsCancellationRequested: false })
+                        if (e.State == DownloadState.Canceled && cts is {IsCancellationRequested: false})
                         {
                             this.logger.Info($"Requesting cancellation for {job.Id}");
                             cts?.Cancel();
@@ -106,6 +106,13 @@
                 catch (Exception e)
                 {
                     // TODO
+                }
+                finally
+                {
+                    if (job != null)
+                    {
+                        new FileInfo(job.ThumbnailPath).SafeDelete();
+                    }
                 }
             }
         }
