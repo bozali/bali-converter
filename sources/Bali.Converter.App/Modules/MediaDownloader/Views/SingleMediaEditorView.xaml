@@ -14,6 +14,25 @@
             <StackPanel>
                 <Image HorizontalAlignment="Left" Source="{Binding ThumbnailData}" Width="320" Height="180" />
 
+                <mah:MetroHeader Margin="0 10 0 0" Header="Target Format">
+                    <ComboBox HorizontalAlignment="Left" Width="200" SelectedValue="{Binding Format}"
+                              SelectedValuePath="Content" SelectedIndex="1">
+                        <ComboBoxItem Content="MP3" />
+                        <ComboBoxItem Content="MP4" />
+                        <ComboBoxItem Content="Wav" />
+                        <ComboBoxItem Content="M4a" />
+                        <ComboBoxItem Content="Opus" />
+                        <ComboBoxItem Content="Vorbis" />
+                        <ComboBoxItem Content="Aac" />
+                        <ComboBoxItem Content="Flac" />
+                        <ComboBoxItem Content="Flv" />
+                        <ComboBoxItem Content="Ogg" />
+                        <ComboBoxItem Content="Webm" />
+                        <ComboBoxItem Content="Mkv" />
+                        <ComboBoxItem Content="Avi"  />
+                    </ComboBox>
+                </mah:MetroHeader>
+
                 <mah:MetroHeader Margin="0 10 0 0" Header="Title">
                     <TextBox Text="{Binding MediaTags.Title, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}" />
                 </mah:MetroHeader>

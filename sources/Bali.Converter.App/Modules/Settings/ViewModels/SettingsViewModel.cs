@@ -1,7 +1,5 @@
 ﻿namespace Bali.Converter.App.Modules.Settings.ViewModels
 {
-    using System.Windows.Input;
-
     using Bali.Converter.App.Services;
 
     using Ookii.Dialogs.Wpf;
