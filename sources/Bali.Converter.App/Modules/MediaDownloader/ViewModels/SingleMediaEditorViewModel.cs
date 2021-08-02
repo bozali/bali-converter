@@ -22,11 +22,7 @@
         private readonly IDownloadRegistry downloadRegistry;
         private readonly IMapper mapper;
 
-        private MediaTagsViewModel mediaTags;
-        private string format;
-        private byte[] thumbnailData;
-        private string thumbnailPath;
-        private Video video;
+        private VideoViewModel video;
 
         public SingleMediaEditorViewModel(IRegionManager regionManager, IDownloadRegistry downloadRegistry, IMapper mapper)
         {
@@ -39,39 +35,15 @@
 
         public DelegateCommand DownloadCommand { get; }
 
-        public MediaTagsViewModel MediaTags
+        public VideoViewModel Video
         {
-            get => this.mediaTags;
-            set => this.SetProperty(ref this.mediaTags, value);
-        }
-
-        public string Format
-        {
-            get => this.format;
-            set => this.SetProperty(ref this.format, value);
-        }
-
-        public byte[] ThumbnailData
-        {
-            get => this.thumbnailData;
-            set => this.SetProperty(ref this.thumbnailData, value);
+            get => this.video;
+            set => this.SetProperty(ref this.video, value);
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            this.video = navigationContext.Parameters.GetValue<Video>("Video");
-
-            this.Format = navigationContext.Parameters.GetValue<string>("Format");
-
-            this.thumbnailPath = navigationContext.Parameters.GetValue<string>("ThumbnailPath");
-            this.ThumbnailData = File.ReadAllBytes(this.thumbnailPath);
-
-            this.MediaTags = new MediaTagsViewModel
-            {
-                Title = this.video.Title.RemoveIllegalChars(),
-                Artist = this.video.Channel,
-                Year = this.video.UploadDate.Year
-            };
+            this.Video = navigationContext.Parameters.GetValue<VideoViewModel>("Video");
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -87,10 +59,10 @@
         {
             var job = new DownloadJob
             {
-                Tags = this.mapper.Map<MediaTags>(this.MediaTags),
-                Url = this.video.Url,
-                ThumbnailPath = this.thumbnailPath,
-                TargetFormat = Enum.Parse<MediaFormat>(this.Format, true)
+                Tags = this.mapper.Map<MediaTags>(this.Video.Tags),
+                Url = this.Video.Url,
+                ThumbnailPath = this.Video.ThumbnailPath,
+                TargetFormat = Enum.Parse<MediaFormat>(this.Video.Format, true)
             };
 
             this.downloadRegistry.Add(job);

@@ -13,13 +13,18 @@
 
     using Bali.Converter.Common;
     using Bali.Converter.Common.Enums;
+    using Bali.Converter.Common.Extensions;
     using Bali.Converter.YoutubeDl.Models;
+
+    using log4net;
 
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
     public class YoutubeDl : IYoutubeDl
     {
+        private readonly ILog logger = LogManager.GetLogger(Constants.ApplicationLogger);
+
         private readonly string youtubedl;
         private readonly string ffmpeg;
         private readonly string temp;
@@ -29,6 +34,62 @@
             this.youtubedl = youtubedl;
             this.ffmpeg = ffmpeg;
             this.temp = temp;
+        }
+
+        public async Task<IReadOnlyCollection<Video>> GetVideos(string url)
+        {
+            string pathPattern = Path.Combine(this.temp, "%(id)s.%(ext)s");
+
+            var arguments = new List<string>();
+            arguments.Add($@"--output ""{pathPattern}""");
+            arguments.Add($@"""{url}""");
+            arguments.Add("--write-info-json");
+            arguments.Add("--skip-download");
+
+            var fileNames = new List<string>();
+
+            using var process = new ProcessWrapper(this.youtubedl);
+
+            void OnProcessOnOutputDataReceived(object s, DataReceivedEventArgs e)
+            {
+                this.logger.Info(e.Data);
+
+                if (string.IsNullOrEmpty(e.Data) || !e.Data.Contains(".info.json"))
+                {
+                    return;
+                }
+
+                var pattern = new Regex(@"[\w-]+S*\.info.json");
+                var match = pattern.Match(e.Data);
+
+                fileNames.Add(match.Value);
+            }
+
+            this.logger.Info($"Starting {this.youtubedl} with following arguments: {string.Join(' ', arguments)}");
+
+            process.OutputDataReceived += OnProcessOnOutputDataReceived;
+
+            await process.Execute(string.Join(' ', arguments));
+
+            process.OutputDataReceived -= OnProcessOnOutputDataReceived;
+
+            var result = new List<Video>();
+
+            foreach (string fileName in fileNames)
+            {
+                string infoPath = Path.Combine(this.temp, fileName);
+                using var reader = new StreamReader(infoPath);
+
+                var video = JsonConvert.DeserializeObject<Video>(await reader.ReadToEndAsync());
+
+                result.Add(video);
+
+                reader.Close();
+
+                new FileInfo(infoPath).SafeDelete();
+            }
+
+            return result;
         }
 
         public async Task<Video> GetVideo(string url)

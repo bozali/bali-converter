@@ -1,10 +1,12 @@
 ﻿namespace Bali.Converter.App.Modules.MediaDownloader.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
+    using System.Web;
 
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Modules.MediaDownloader.Views;
@@ -37,6 +39,7 @@
 
         private string url;
         private string format;
+        private bool proceedAsPlaylist;
 
         public MediaDownloaderViewModel(IRegionManager regionManager,
                                         IDownloadRegistry downloadRegistry,
@@ -63,6 +66,8 @@
                 {
                     this.DownloadCommand.RaiseCanExecuteChanged();
                     this.EditCommand.RaiseCanExecuteChanged();
+
+                    this.RaisePropertyChanged(nameof(this.IsPlaylist));
                 }
             } 
         }
@@ -71,6 +76,32 @@
         {
             get => this.format;
             set => this.SetProperty(ref this.format, value);
+        }
+
+        public bool ProceedAsPlaylist
+        {
+            get => this.proceedAsPlaylist;
+            set => this.SetProperty(ref this.proceedAsPlaylist, value);
+        }
+
+        public bool IsPlaylist
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.Url))
+                {
+                    return false;
+                }
+
+                if (!Uri.TryCreate(this.Url, UriKind.Absolute, out var uri))
+                {
+                    return false;
+                }
+
+                return HttpUtility.ParseQueryString(uri.Query)
+                                  .AllKeys
+                                  .Any(key => string.Equals(key, "list", StringComparison.OrdinalIgnoreCase));
+            }
         }
 
         public DelegateCommand DownloadCommand { get; }
@@ -97,22 +128,20 @@
 
             try
             {
-                var video = await this.youtubedl.GetVideo(this.Url);
-
-                var job = new DownloadJob
+                if (this.IsPlaylist && this.ProceedAsPlaylist)
                 {
-                    ThumbnailPath = await this.DownloadThumbnail(video),
-                    TargetFormat = Enum.Parse<MediaFormat>(this.Format, true),
-                    Url = this.Url,
-                    Tags = new MediaTags
-                    {
-                        Title = video.Title.RemoveIllegalChars(),
-                        Artist = video.Channel,
-                        Year = video.UploadDate.Year
-                    }
-                };
+                    var videos = await this.youtubedl.GetVideos(this.Url);
 
-                this.downloadRegistry.Add(job);
+                    foreach (var video in videos)
+                    {
+                        await this.RegisterJob(video);
+                    }
+                }
+                else
+                {
+                    var video = await this.youtubedl.GetVideo(this.Url);
+                    await this.RegisterJob(video);
+                }
 
                 this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(MediaDownloaderView));
             }
@@ -132,14 +161,29 @@
 
             try
             {
-                var video = await this.youtubedl.GetVideo(this.Url);
+                if (this.IsPlaylist && this.ProceedAsPlaylist)
+                {
+                    var resources = await this.youtubedl.GetVideos(this.Url);
+                    var videos = new List<VideoViewModel>();
 
-                var parameters = new NavigationParameters();
-                parameters.Add("ThumbnailPath", await this.DownloadThumbnail(video));
-                parameters.Add("Format", this.Format);
-                parameters.Add("Video", video);
+                    foreach (var resource in resources)
+                    {
+                        videos.Add(await this.ConvertVideoResource(resource));
+                    }
 
-                this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(SingleMediaEditorView), parameters);
+                    var parameters = new NavigationParameters();
+                    parameters.Add("Videos", videos);
+                }
+                else
+                {
+                    var resource = await this.youtubedl.GetVideo(this.Url);
+                    var video = await this.ConvertVideoResource(resource);
+
+                    var parameters = new NavigationParameters();
+                    parameters.Add("Video", video);
+
+                    this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(SingleMediaEditorView), parameters);
+                }
             }
             catch (Exception e)
             {
@@ -151,7 +195,44 @@
             }
         }
 
-        private async Task<string> DownloadThumbnail(Video video)
+        private async Task RegisterJob(Video video)
+        {
+            var job = new DownloadJob
+            {
+                ThumbnailPath = (await this.DownloadThumbnail(video)).Path,
+                TargetFormat = Enum.Parse<MediaFormat>(this.Format, true),
+                Url = this.Url,
+                Tags = new MediaTags
+                {
+                    Title = video.Title.RemoveIllegalChars(),
+                    Artist = video.Channel,
+                    Year = video.UploadDate.Year
+                }
+            };
+
+            this.downloadRegistry.Add(job);
+        }
+
+        private async Task<VideoViewModel> ConvertVideoResource(Video video)
+        {
+            var thumbnail = await this.DownloadThumbnail(video);
+
+            return new VideoViewModel
+            {
+                ThumbnailPath = thumbnail.Path,
+                ThumbnailData = thumbnail.Data,
+                Format = this.Format,
+                Url = video.Url,
+                Tags = new MediaTagsViewModel
+                {
+                    Title = video.Title.RemoveIllegalChars(),
+                    Artist = video.Channel,
+                    Year = video.UploadDate.Year
+                }
+            };
+        }
+
+        private async Task<(string Path, byte[] Data)> DownloadThumbnail(Video video)
         {
             var client = new WebClient();
 
@@ -184,7 +265,7 @@
                 await image.WriteAsync(stream, MagickFormat.Jpeg);
             }
 
-            return destinationThumbnailFile.FullName;
+            return (destinationThumbnailFile.FullName, thumbnailData);
         }
     }
 }

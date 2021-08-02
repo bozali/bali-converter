@@ -18,6 +18,7 @@
         private string performers;
 
         private string collectionInput;
+        private byte[] thumbnailData;
 
         public string Title
         {

@@ -12,10 +12,10 @@
     <ScrollViewer>
         <Grid Margin="15">
             <StackPanel>
-                <Image HorizontalAlignment="Left" Source="{Binding ThumbnailData}" Width="320" Height="180" />
+                <Image HorizontalAlignment="Left" Source="{Binding Video.ThumbnailData}" Width="320" Height="180" />
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Target Format">
-                    <ComboBox HorizontalAlignment="Left" Width="200" SelectedValue="{Binding Format}"
+                    <ComboBox HorizontalAlignment="Left" Width="200" SelectedValue="{Binding Video.Format}"
                               SelectedValuePath="Content" SelectedIndex="1">
                         <ComboBoxItem Content="MP3" />
                         <ComboBoxItem Content="MP4" />
@@ -34,42 +34,42 @@
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Title">
-                    <TextBox Text="{Binding MediaTags.Title, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}" />
+                    <TextBox Text="{Binding Video.Tags.Title, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}" />
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Artist">
-                    <TextBox Text="{Binding MediaTags.Artist}" />
+                    <TextBox Text="{Binding Video.Tags.Artist}" />
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Album">
-                    <TextBox Text="{Binding MediaTags.Album}" />
+                    <TextBox Text="{Binding Video.Tags.Album}" />
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Comment">
-                    <TextBox Text="{Binding MediaTags.Comment}" />
+                    <TextBox Text="{Binding Video.Tags.Comment}" />
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Copyright">
-                    <TextBox Text="{Binding MediaTags.Copyright}" />
+                    <TextBox Text="{Binding Video.Tags.Copyright}" />
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Album Artists">
-                    <TextBox Text="{Binding MediaTags.AlbumArtists}"
+                    <TextBox Text="{Binding Video.Tags.AlbumArtists}"
                              mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Genres">
-                    <TextBox Text="{Binding MediaTags.Genres}"
+                    <TextBox Text="{Binding Video.Tags.Genres}"
                              mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Performers">
-                    <TextBox Text="{Binding MediaTags.Performers}"
+                    <TextBox Text="{Binding Video.Tags.Performers}"
                              mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
                 </mah:MetroHeader>
 
                 <mah:MetroHeader Margin="0 10 0 0" Header="Composers">
-                    <TextBox Text="{Binding MediaTags.Composers}"
+                    <TextBox Text="{Binding Video.Tags.Composers}"
                              mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
                 </mah:MetroHeader>
 
@@ -83,7 +83,7 @@
                     <mah:NumericUpDown HorizontalAlignment="Left" Width="150"
                                        ChangeValueOnTextChanged="True"
                                        NumericInputMode="Numbers"
-                                       Value="{Binding MediaTags.Year}" />
+                                       Value="{Binding Video.Tags.Year}" />
                 </mah:MetroHeader>
 
                 <Button HorizontalAlignment="Left" Margin="0 20 0 0" Content="Download" Width="150"

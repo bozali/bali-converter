@@ -38,6 +38,10 @@
                 </ComboBox>
             </mah:MetroHeader>
 
+            <CheckBox Margin="0 10 0 0" Visibility="{Binding IsPlaylist, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                      Content="The provided URL is a playlist. Do you want to proceed as playlist?"
+                      IsChecked="{Binding ProceedAsPlaylist}" />
+
             <StackPanel Margin="0 10 0 0" Orientation="Horizontal">
                 <Button Margin="0 0 10 0" HorizontalAlignment="Left" Content="Edit" Width="150" Command="{Binding EditCommand}" />
                 <Button HorizontalAlignment="Left" Content="Download" Width="150" Command="{Binding DownloadCommand}" />
