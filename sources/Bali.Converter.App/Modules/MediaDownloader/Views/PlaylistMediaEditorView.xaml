@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="Bali.Converter.App.Modules.MediaDownloader.Views.PlaylistMediaEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bali.Converter.App.Modules.MediaDownloader.Views"
+             xmlns:vm="clr-namespace:Bali.Converter.App.Modules.MediaDownloader.ViewModels"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:PlaylistMediaEditorViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer>
+        <Grid Margin="15">
+            <StackPanel>
+                <Image HorizontalAlignment="Left" Source="{Binding Video.ThumbnailData}" Width="320" Height="180" />
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Target Format">
+                    <ComboBox HorizontalAlignment="Left" Width="200" SelectedValue="{Binding Video.Format}"
+                              SelectedValuePath="Content" SelectedIndex="1">
+                        <ComboBoxItem Content="MP3" />
+                        <ComboBoxItem Content="MP4" />
+                        <ComboBoxItem Content="Wav" />
+                        <ComboBoxItem Content="M4a" />
+                        <ComboBoxItem Content="Opus" />
+                        <ComboBoxItem Content="Vorbis" />
+                        <ComboBoxItem Content="Aac" />
+                        <ComboBoxItem Content="Flac" />
+                        <ComboBoxItem Content="Flv" />
+                        <ComboBoxItem Content="Ogg" />
+                        <ComboBoxItem Content="Webm" />
+                        <ComboBoxItem Content="Mkv" />
+                        <ComboBoxItem Content="Avi"  />
+                    </ComboBox>
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Title">
+                    <TextBox Text="{Binding Video.Tags.Title, ValidatesOnDataErrors=True, ValidatesOnExceptions=True, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Artist">
+                    <TextBox Text="{Binding Video.Tags.Artist}" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Album">
+                    <TextBox Text="{Binding Video.Tags.Album}" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Comment">
+                    <TextBox Text="{Binding Video.Tags.Comment}" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Copyright">
+                    <TextBox Text="{Binding Video.Tags.Copyright}" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Album Artists">
+                    <TextBox Text="{Binding Video.Tags.AlbumArtists}"
+                             mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Genres">
+                    <TextBox Text="{Binding Video.Tags.Genres}"
+                             mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Performers">
+                    <TextBox Text="{Binding Video.Tags.Performers}"
+                             mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
+                </mah:MetroHeader>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Composers">
+                    <TextBox Text="{Binding Video.Tags.Composers}"
+                             mah:TextBoxHelper.Watermark="Split text with ; e.g. Some example; Other example" />
+                </mah:MetroHeader>
+
+                <Border>
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick"  />
+                    </Border.InputBindings>
+                </Border>
+
+                <mah:MetroHeader Margin="0 10 0 0" Header="Year">
+                    <mah:NumericUpDown HorizontalAlignment="Left" Width="150"
+                                       ChangeValueOnTextChanged="True"
+                                       NumericInputMode="Numbers"
+                                       Value="{Binding Video.Tags.Year}" />
+                </mah:MetroHeader>
+
+                <StackPanel Margin="0 20 0 0" Orientation="Horizontal">
+                    <Button HorizontalAlignment="Left" Margin="0 0 10 0" Content="Save" Width="150"
+                            Command="{Binding SaveCommand}" />
+
+                    <Button HorizontalAlignment="Left" Margin="0 0 10 0" Content="Cancel" Width="150"
+                            Command="{Binding CancelCommand}" />
+                </StackPanel>
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
+</UserControl>

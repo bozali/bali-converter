@@ -173,6 +173,8 @@
 
                     var parameters = new NavigationParameters();
                     parameters.Add("Videos", videos);
+
+                    this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(PlaylistSelectionView), parameters);
                 }
                 else
                 {

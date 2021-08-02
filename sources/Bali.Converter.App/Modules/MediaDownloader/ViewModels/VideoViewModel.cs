@@ -8,11 +8,19 @@
         private byte[] thumbnailData;
         private string format;
         private string url;
+        private bool isSelected;
+        private bool isExpanded;
 
         public MediaTagsViewModel Tags
         {
             get => this.tags;
             set => this.SetProperty(ref this.tags, value);
+        }
+
+        public bool IsSelected
+        {
+            get => this.isSelected;
+            set => this.SetProperty(ref this.isSelected, value);
         }
 
         public string Url

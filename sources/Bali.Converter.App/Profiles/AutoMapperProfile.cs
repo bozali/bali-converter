@@ -10,6 +10,8 @@
         public AutoMapperProfile()
         {
             this.CreateMap<MediaTags, MediaTagsViewModel>().ReverseMap();
+            this.CreateMap<MediaTagsViewModel, MediaTags>().ReverseMap();
+
         }
     }
 }

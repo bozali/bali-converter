@@ -1,16 +1,13 @@
 ﻿namespace Bali.Converter.App.Modules.MediaDownloader.ViewModels
 {
     using System;
-    using System.IO;
 
     using AutoMapper;
 
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Modules.MediaDownloader.Views;
     using Bali.Converter.Common.Enums;
-    using Bali.Converter.Common.Extensions;
     using Bali.Converter.Common.Media;
-    using Bali.Converter.YoutubeDl.Models;
 
     using Prism.Commands;
     using Prism.Mvvm;

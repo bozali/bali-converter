@@ -80,8 +80,8 @@
                 string infoPath = Path.Combine(this.temp, fileName);
                 using var reader = new StreamReader(infoPath);
 
-                var video = JsonConvert.DeserializeObject<Video>(await reader.ReadToEndAsync());
-
+                var video = JsonConvert.DeserializeObject<Video>(await reader.ReadToEndAsync(),
+                                                            new IsoDateTimeConverter { DateTimeFormat = "yyyyMMdd" });
                 result.Add(video);
 
                 reader.Close();
@@ -144,7 +144,6 @@
 
                 new FileInfo(infoPath).Delete();
             }
-            
         }
 
         public async Task Download(string url, string path, MediaFormat format, Action<float, string> progressReport = null, CancellationToken ct = default)

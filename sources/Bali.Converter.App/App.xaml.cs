@@ -17,9 +17,12 @@
     using Bali.Converter.App.Services;
     using Bali.Converter.App.Workers;
     using Bali.Converter.YoutubeDl;
+
     using log4net;
     using log4net.Config;
+
     using MahApps.Metro.Controls.Dialogs;
+
     using Prism.Ioc;
     using Prism.Unity;
 
@@ -41,6 +44,8 @@
 
             containerRegistry.RegisterForNavigation<MediaDownloaderView, MediaDownloaderViewModel>();
             containerRegistry.RegisterForNavigation<SingleMediaEditorView, SingleMediaEditorViewModel>();
+            containerRegistry.RegisterForNavigation<PlaylistSelectionView, PlaylistSelectionViewModel>();
+            containerRegistry.RegisterForNavigation<PlaylistMediaEditorView, PlaylistMediaEditorViewModel>();
             containerRegistry.RegisterForNavigation<DownloadsView, DownloadsViewModel>();
             containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();
 

@@ -27,19 +27,6 @@
             this.downloadRegistry.DownloadJobAdded += this.OnDownloadJobAdded;
             this.downloadRegistry.DownloadJobRemoved += this.OnDownloadJobRemoved;
 
-            // this.DownloadJobs.Add(new DownloadJobViewModel(new DownloadJob
-            // {
-            //     Tags = new MediaTags
-            //     {
-            //         Title = "Some title",
-            //         Year = 2021,
-            //     },
-            //     Url = "http://youtube.com",
-            //     Progress = 30.0f,
-            //     ProgressText = "Downloading something",
-            //     TargetFormat = MediaFormat.MP3
-            // }));
-
             this.SelectItemCommand = new DelegateCommand<DownloadJobViewModel>(job =>
                                                                                {
                                                                                    job.IsSelected = !job.IsSelected;
