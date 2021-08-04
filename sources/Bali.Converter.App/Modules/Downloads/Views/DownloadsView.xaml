@@ -16,8 +16,8 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
-    <ScrollViewer Margin="15" VerticalScrollBarVisibility="Auto">
-        <Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="15">
             <TextBlock Text="There are currently no downloads queued."
                        FontSize="14" TextWrapping="Wrap"
                        Visibility="{Binding IsDownloadsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />

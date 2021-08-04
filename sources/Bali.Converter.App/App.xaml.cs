@@ -6,6 +6,8 @@
 
     using AutoMapper;
 
+    using Bali.Converter.App.Modules.Conversion.ViewModels;
+    using Bali.Converter.App.Modules.Conversion.Views;
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Modules.Downloads.ViewModels;
     using Bali.Converter.App.Modules.Downloads.Views;
@@ -48,6 +50,9 @@
             containerRegistry.RegisterForNavigation<PlaylistMediaEditorView, PlaylistMediaEditorViewModel>();
             containerRegistry.RegisterForNavigation<DownloadsView, DownloadsViewModel>();
             containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();
+
+            containerRegistry.RegisterForNavigation<ConversionView, ConversionViewModel>();
+            containerRegistry.RegisterForNavigation<VideoConversionView, VideoConversionViewModel>();
 
             containerRegistry.Register<DownloadBackgroundWorker>();
         }

@@ -53,6 +53,12 @@
                             <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="White" Data="M4,6H2V20A2,2 0 0,0 4,22H18V20H4V6M20,2H8A2,2 0 0,0 6,4V16A2,2 0 0,0 8,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M12,14.5V5.5L18,10L12,14.5Z" />
                         </mah:HamburgerMenuIconItem.Icon>
                     </mah:HamburgerMenuIconItem>
+
+                    <mah:HamburgerMenuIconItem Label="Conversion" Tag="ConversionView">
+                        <mah:HamburgerMenuIconItem.Icon>
+                            <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="White" Data="M6,2A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2H6M6,4H13V9H18V20H6V4M8,12V14H16V12H8M8,16V18H13V16H8Z" />
+                        </mah:HamburgerMenuIconItem.Icon>
+                    </mah:HamburgerMenuIconItem>
                 </mah:HamburgerMenuItemCollection>
             </mah:HamburgerMenu.ItemsSource>
 
