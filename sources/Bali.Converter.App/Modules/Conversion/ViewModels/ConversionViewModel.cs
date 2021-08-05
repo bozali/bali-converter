@@ -1,10 +1,14 @@
 ﻿namespace Bali.Converter.App.Modules.Conversion.ViewModels
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Bali.Converter.App.Modules.Conversion.Views;
+    using Bali.Converter.Common.Enums;
     using MahApps.Metro.Controls.Dialogs;
+
     using Prism.Commands;
     using Prism.Mvvm;
     using Prism.Regions;
@@ -70,7 +74,22 @@
             var parameters = new NavigationParameters();
             parameters.Add("Metadata", this.Metadata);
 
-            this.regionManager.RequestNavigate("ContentRegion", nameof(VideoConversionView), parameters);
+
+            switch (this.Metadata.DocumentDomain)
+            {
+                case DocumentDomain.Audio:
+                    break;
+                case DocumentDomain.Document:
+                    break;
+                case DocumentDomain.Video:
+                    this.regionManager.RequestNavigate("ContentRegion", nameof(VideoConversionView), parameters);
+                    break;
+                case DocumentDomain.Image:
+                    this.regionManager.RequestNavigate("ContentRegion", nameof(ImageConversionView), parameters);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

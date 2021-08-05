@@ -13,6 +13,11 @@
 
         public DocumentExtension Extension { get; set; }
 
+        public DocumentDomain DocumentDomain
+        {
+            get => this.GetDocumentDomain(this.Extension);
+        }
+
         public DocumentExtension[] SupportedTargetFormats
         {
             get

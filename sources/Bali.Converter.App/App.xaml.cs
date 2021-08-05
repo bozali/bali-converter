@@ -57,6 +57,7 @@
 
             containerRegistry.RegisterForNavigation<ConversionView, ConversionViewModel>();
             containerRegistry.RegisterForNavigation<VideoConversionView, VideoConversionViewModel>();
+            containerRegistry.RegisterForNavigation<ImageConversionView, ImageConversionViewModel>();
 
             containerRegistry.Register<DownloadBackgroundWorker>();
         }

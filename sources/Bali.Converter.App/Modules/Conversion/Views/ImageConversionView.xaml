@@ -4,9 +4,35 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bali.Converter.App.Modules.Conversion.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             xmlns:vm="clr-namespace:Bali.Converter.App.Modules.Conversion.ViewModels"
+             xmlns:prism="http://prismlibrary.com/"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:ImageConversionViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <Border Margin="0 0 0 10" HorizontalAlignment="Center" Width="800" Height="600"
+                    BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="1">
+                <Canvas MouseWheel="OnCanvasMouseWheel">
+                    <Canvas.Background>
+                        <ImageBrush x:Name="EditingImage" Stretch="None" ImageSource="{Binding SourcePath}">
+                            <ImageBrush.Transform>
+                                <ScaleTransform ScaleX="1" ScaleY="1" CenterX="0.5" CenterY="0.5" />
+                            </ImageBrush.Transform>
+                        </ImageBrush>
+                    </Canvas.Background>
+                </Canvas>
+            </Border>
+
+            <Button HorizontalAlignment="Left" Width="150" Content="Convert" Command="{Binding ConvertCommand}" />
+
+        </StackPanel>
+
     </Grid>
 </UserControl>

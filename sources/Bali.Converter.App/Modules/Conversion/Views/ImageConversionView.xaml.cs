@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace Bali.Converter.App.Modules.Conversion.Views
+﻿namespace Bali.Converter.App.Modules.Conversion.Views
 {
-    /// <summary>
-    /// Interaction logic for ImageConversionView.xaml
-    /// </summary>
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
+
     public partial class ImageConversionView : UserControl
     {
         public ImageConversionView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+        }
+
+        private void OnCanvasMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var canvas = (Canvas)sender;
+
+            var transform = (ScaleTransform)this.EditingImage.Transform;
+
+            double zoom = e.Delta > 0 ? .2 : -.2;
+            transform.ScaleX += zoom;
+            transform.ScaleY += zoom;
+
         }
     }
 }

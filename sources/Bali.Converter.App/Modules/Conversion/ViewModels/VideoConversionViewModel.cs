@@ -1,18 +1,19 @@
 ﻿namespace Bali.Converter.App.Modules.Conversion.ViewModels
 {
     using System;
-    using System.Printing;
     using System.Threading.Tasks;
     using System.Windows.Controls;
     using System.Windows.Threading;
+
     using Bali.Converter.App.Modules.Conversion.Views;
     using Bali.Converter.FFmpeg;
     using Bali.Converter.FFmpeg.Models;
+
     using Ookii.Dialogs.Wpf;
+
     using Prism.Commands;
     using Prism.Mvvm;
     using Prism.Regions;
-    using Prism.Services.Dialogs;
 
     public class VideoConversionViewModel : BindableBase, INavigationAware
     {
