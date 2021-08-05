@@ -1,22 +1,64 @@
 ﻿namespace Bali.Converter.App.Modules.Conversion.ViewModels
 {
     using System;
+    using System.Printing;
+    using System.Threading.Tasks;
     using System.Windows.Controls;
+    using System.Windows.Threading;
+    using Bali.Converter.App.Modules.Conversion.Views;
+    using Ookii.Dialogs.Wpf;
+    using Prism.Commands;
     using Prism.Mvvm;
     using Prism.Regions;
+    using Prism.Services.Dialogs;
 
     public class VideoConversionViewModel : BindableBase, INavigationAware
     {
-        private VideoConversionOptionsViewModel options;
-        private string sourcePath;
+        private readonly IRegionManager regionManager;
 
-        public VideoConversionViewModel()
+        private VideoConversionOptionsViewModel options;
+        private DispatcherTimer timer;
+        private string sourcePath;
+        private bool isMediaPlaying;
+        private int mediaPosition;
+
+        public VideoConversionViewModel(IRegionManager regionManager)
         {
+            this.regionManager = regionManager;
+
+            this.ConvertCommand = new DelegateCommand(this.Convert);
+            this.PlayPauseCommand = new DelegateCommand(this.PlayPauseMedia);
+            this.StopCommand = new DelegateCommand(this.StopMedia);
+
+            this.IsMediaPlaying = true;
+
+            this.timer = new DispatcherTimer();
+            this.timer.Interval = TimeSpan.FromSeconds(1.0);
+            this.timer.Tick += (s, e) => this.MediaPosition = this.MediaElement.Position.Seconds;
+            this.timer.Start();
         }
+
+        public DelegateCommand ConvertCommand { get; }
+
+        public DelegateCommand PlayPauseCommand { get; }
+
+        public DelegateCommand StopCommand { get; }
 
         public MediaElement MediaElement { get; set; }
 
         public ConversionMetadata Metadata { get; set; }
+
+        public bool IsMediaPlaying
+        {
+            get => this.isMediaPlaying;
+            set => this.SetProperty(ref this.isMediaPlaying, value);
+        }
+
+        public int MediaPosition
+        {
+            get => this.mediaPosition;
+            set => this.SetProperty(ref this.mediaPosition, value);
+        }
 
         public string SourcePath
         {
@@ -35,16 +77,18 @@
             this.Metadata = navigationContext.Parameters.GetValue<ConversionMetadata>("Metadata");
             this.SourcePath = this.Metadata.SourcePath;
 
+            // TODO Read the information from the SourcePath
+
             this.Options = new VideoConversionOptionsViewModel
             {
                 To = 0,
                 From = 0,
-                Fps = 30 // TODO Read the value from the metadata or from the file.
+                Fps = 60 // TODO Read the value from the metadata or from the file.
             };
 
             this.MediaElement.MediaOpened += (s, e) =>
                                              {
-                                                 this.Options.MaximumLength = Convert.ToInt32(Math.Floor(this.MediaElement.NaturalDuration.TimeSpan.TotalSeconds));
+                                                 this.Options.MaximumLength = System.Convert.ToInt32(Math.Floor(this.MediaElement.NaturalDuration.TimeSpan.TotalSeconds));
                                                  this.Options.To = this.Options.MaximumLength;
                                              };
         }
@@ -56,6 +100,44 @@
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
+        }
+
+        private async Task Convert()
+        {
+            string extension = this.Metadata.Extension.ToString("G").ToLower();
+            string filter = $"(*.{extension})|*.*";
+
+            var dialog = new VistaSaveFileDialog();
+            dialog.Filter = filter;
+            dialog.DefaultExt = $".{extension}";
+
+            if (dialog.ShowDialog() ?? false)
+            {
+                string destination = dialog.FileName;
+                // TODO Save to destination
+            }
+
+            this.regionManager.RequestNavigate("ContentRegion", nameof(ConversionView));
+        }
+
+        private void PlayPauseMedia()
+        {
+            if (this.IsMediaPlaying)
+            {
+                this.MediaElement.Pause();
+            }
+            else
+            {
+                this.MediaElement.Play();
+            }
+
+            this.IsMediaPlaying = !this.IsMediaPlaying;
+        }
+
+        private void StopMedia()
+        {
+            this.MediaElement.Stop();
+            this.IsMediaPlaying = false;
         }
     }
 }

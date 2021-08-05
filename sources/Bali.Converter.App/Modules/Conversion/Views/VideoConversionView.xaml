@@ -7,9 +7,11 @@
              xmlns:vm="clr-namespace:Bali.Converter.App.Modules.Conversion.ViewModels"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:VideoConversionViewModel}"
              d:DesignHeight="450" d:DesignWidth="800"
-             prism:ViewModelLocator.AutoWireViewModel="True">
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             x:Name="Root">
 
     <Grid Margin="15">
         <Grid.RowDefinitions>
@@ -17,26 +19,64 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <MediaElement Grid.Row="0" Source="{Binding SourcePath}" Width="480" Height="272"
-                      LoadedBehavior="Manual" Stretch="Fill" x:Name="Media"
-                      HorizontalAlignment="Left" />
+        <StackPanel HorizontalAlignment="Left">
+            <MediaElement Source="{Binding SourcePath}" Width="480" Height="272"
+                          LoadedBehavior="Manual" Stretch="Fill" x:Name="Media"
+                          ScrubbingEnabled="True" />
+
+            <StackPanel Margin="0 10 0 0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="PlayButton" Margin="0 0 10 0" Width="32" Height="32" Padding="2 0 0 0" Command="{Binding PlayPauseCommand}">
+
+                    <Button.Style>
+                        <Style BasedOn="{StaticResource MahApps.Styles.Button.Circle}" TargetType="{x:Type Button}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsMediaPlaying}" Value="True">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <icon:PackIconMaterial VerticalAlignment="Center" HorizontalAlignment="Center" Width="12" Height="12" Kind="Pause" Padding="0 0 2 0" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding IsMediaPlaying}" Value="False">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <icon:PackIconMaterial VerticalAlignment="Center" HorizontalAlignment="Center" Width="12" Height="12" Kind="Play" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <Button Margin="0 0 10 0" Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="32" Height="32" Command="{Binding StopCommand}">
+                    <icon:PackIconMaterial VerticalAlignment="Center" HorizontalAlignment="Center" Width="12" Height="12" Kind="Stop" />
+                </Button>
+            </StackPanel>
+
+            <Slider Minimum="0" Maximum="{Binding Options.To}" Value="{Binding MediaPosition}" />
+        </StackPanel>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <mah:RangeSlider mah:SliderHelper.ChangeValueBy="LargeChange"
                                  mah:SliderHelper.EnableMouseWheel="MouseHover"
                                  AutoToolTipPlacement="TopLeft"
-                                 LargeChange="10"
-                                 Maximum="{Binding Options.MaximumLength}"
-                                 Minimum="0"
                                  Orientation="Horizontal"
+                                 LargeChange="10"
                                  SmallChange="1"
                                  LowerValue="{Binding Options.From}"
-                                 UpperValue="{Binding Options.To}" />
+                                 UpperValue="{Binding Options.To}" 
+                                 Maximum="{Binding Options.MaximumLength}"
+                                 Minimum="0"
+                                 Margin="0 0 0 10" />
 
-                <mah:MetroHeader Header="FPS">
-                    <mah:NumericUpDown Minimum="10" Maximum="60" />
+                <mah:MetroHeader Margin="0 0 0 10" Header="FPS" HorizontalAlignment="Left">
+                    <mah:NumericUpDown Width="150" Minimum="10" Maximum="60" Value="{Binding Options.Fps}" />
                 </mah:MetroHeader>
+
+                <Button HorizontalAlignment="Left" Width="150" Content="Convert" />
             </StackPanel>
         </ScrollViewer>
 

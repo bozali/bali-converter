@@ -2,12 +2,14 @@
 {
     using System.Collections.ObjectModel;
     using System.Linq;
+
     using Bali.Converter.App.Modules.Conversion.Views;
+
     using Prism.Commands;
     using Prism.Mvvm;
     using Prism.Regions;
 
-    public class ConversionViewModel : BindableBase
+    public class ConversionViewModel : BindableBase, INavigationAware
     {
         private readonly IRegionManager regionManager;
 
@@ -30,6 +32,20 @@
         }
 
         public ConversionMetadata Metadata { get; set; }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            this.Metadata = null;
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+        }
 
         public void HandleDrop(string path)
         {
