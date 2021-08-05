@@ -6,6 +6,8 @@
     using System.Windows.Controls;
     using System.Windows.Threading;
     using Bali.Converter.App.Modules.Conversion.Views;
+    using Bali.Converter.FFmpeg;
+    using Bali.Converter.FFmpeg.Models;
     using Ookii.Dialogs.Wpf;
     using Prism.Commands;
     using Prism.Mvvm;
@@ -15,6 +17,7 @@
     public class VideoConversionViewModel : BindableBase, INavigationAware
     {
         private readonly IRegionManager regionManager;
+        private readonly IFFmpeg ffmpeg;
 
         private VideoConversionOptionsViewModel options;
         private DispatcherTimer timer;
@@ -22,11 +25,12 @@
         private bool isMediaPlaying;
         private int mediaPosition;
 
-        public VideoConversionViewModel(IRegionManager regionManager)
+        public VideoConversionViewModel(IRegionManager regionManager, IFFmpeg ffmpeg)
         {
             this.regionManager = regionManager;
+            this.ffmpeg = ffmpeg;
 
-            this.ConvertCommand = new DelegateCommand(this.Convert);
+            this.ConvertCommand = new DelegateCommand(async () => await this.Convert());
             this.PlayPauseCommand = new DelegateCommand(this.PlayPauseMedia);
             this.StopCommand = new DelegateCommand(this.StopMedia);
 
@@ -104,7 +108,7 @@
 
         private async Task Convert()
         {
-            string extension = this.Metadata.Extension.ToString("G").ToLower();
+            string extension = this.Metadata.Target.ToLower();
             string filter = $"(*.{extension})|*.*";
 
             var dialog = new VistaSaveFileDialog();
@@ -114,7 +118,12 @@
             if (dialog.ShowDialog() ?? false)
             {
                 string destination = dialog.FileName;
-                // TODO Save to destination
+                await this.ffmpeg.Convert(this.Metadata.SourcePath, destination, new VideoConversionOptions
+                {
+                    To = this.Options.To,
+                    From = this.Options.From,
+                    Fps = this.Options.Fps
+                });
             }
 
             this.regionManager.RequestNavigate("ContentRegion", nameof(ConversionView));

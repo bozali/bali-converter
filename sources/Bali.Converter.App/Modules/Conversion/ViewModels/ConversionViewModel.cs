@@ -35,6 +35,7 @@
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            this.Supported = new ObservableCollection<string>();
             this.Metadata = null;
         }
 
@@ -56,6 +57,8 @@
 
         private void Continue(string target)
         {
+            this.Metadata.Target = target;
+
             var parameters = new NavigationParameters();
             parameters.Add("Metadata", this.Metadata);
 

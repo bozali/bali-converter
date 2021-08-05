@@ -9,6 +9,8 @@
     {
         public string SourcePath { get; set; }
 
+        public string Target { get; set; }
+
         public DocumentExtension Extension { get; set; }
 
         public DocumentExtension[] SupportedTargetFormats

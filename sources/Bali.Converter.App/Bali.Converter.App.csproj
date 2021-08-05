@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bali.Converter.FFmpeg\Bali.Converter.FFmpeg.csproj" />
     <ProjectReference Include="..\Bali.Converter.YoutubeDl\Bali.Converter.YoutubeDl.csproj" />
   </ItemGroup>
 

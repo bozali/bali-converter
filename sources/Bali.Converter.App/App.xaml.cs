@@ -18,6 +18,7 @@
     using Bali.Converter.App.Profiles;
     using Bali.Converter.App.Services;
     using Bali.Converter.App.Workers;
+    using Bali.Converter.FFmpeg;
     using Bali.Converter.YoutubeDl;
 
     using log4net;
@@ -38,8 +39,11 @@
             IYoutubeDl youtubedl = new YoutubeDl(@"Tools\youtube-dl.exe", @"Tools\ffmpeg.exe", IConfigurationService.TempPath);
             var mapper = new MapperConfiguration(configuration => configuration.AddProfile<AutoMapperProfile>()).CreateMapper();
 
+            IFFmpeg ffmpeg = new FFmpeg(@"Tools\ffmpeg.exe");
+
             containerRegistry.RegisterInstance(DialogCoordinator.Instance);
             containerRegistry.RegisterInstance(youtubedl);
+            containerRegistry.RegisterInstance(ffmpeg);
             containerRegistry.RegisterInstance(mapper);
             containerRegistry.RegisterSingleton<IConfigurationService, ConfigurationService>();
             containerRegistry.RegisterSingleton<IDownloadRegistry, DownloadRegistry>();
