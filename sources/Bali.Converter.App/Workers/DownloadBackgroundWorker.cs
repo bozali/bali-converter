@@ -134,7 +134,7 @@
             file.Tag.Composers = tags.Composers?.Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.TrimEntries);
             file.Tag.Genres = tags.Genres?.Split(";", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-            if (!string.IsNullOrEmpty(thumbnailPath))
+            if (!string.IsNullOrEmpty(thumbnailPath) && new FileInfo(thumbnailPath).Exists)
             {
                 byte[] data = await File.ReadAllBytesAsync(thumbnailPath);
 
