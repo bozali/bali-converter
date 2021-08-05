@@ -7,22 +7,27 @@
              xmlns:vm="clr-namespace:Bali.Converter.App.Modules.Conversion.ViewModels"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:ConversionViewModel}"
              d:DesignHeight="450" d:DesignWidth="800"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mah:DialogParticipation.Register="{Binding}"
              x:Name="Root">
 
-    <ScrollViewer>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="15" >
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Rectangle Grid.Row="0" Width="300" Height="300" HorizontalAlignment="Center" VerticalAlignment="Center"
-                       AllowDrop="True" Drop="OnDrop" DragEnter="OnDragEnter" DragLeave="OnDragLeave"
-                       Fill="Black" />
+            <Border Grid.Row="0" Width="300" Height="300" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    AllowDrop="True" Drop="OnDrop" DragEnter="OnDragEnter" DragLeave="OnDragLeave" Background="Transparent">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <icon:PackIconMaterial Margin="0 0 0 10" HorizontalAlignment="Center" Width="64" Height="64" Kind="InboxArrowUp" />
+                    <TextBlock Text="Drag and drop e.g. MP3, MP4, JPEG, PNG, ..." />
+                </StackPanel>
+            </Border>
 
             <ItemsControl Grid.Row="1" HorizontalAlignment="Center" ItemsSource="{Binding Supported}">
                 <ItemsControl.ItemsPanel>

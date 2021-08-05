@@ -6,33 +6,52 @@
              xmlns:local="clr-namespace:Bali.Converter.App.Modules.Conversion.Views"
              xmlns:vm="clr-namespace:Bali.Converter.App.Modules.Conversion.ViewModels"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:image="clr-namespace:Bali.Converter.App.Modules.Conversion.ViewModels.Image"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:ImageConversionViewModel}"
              d:DesignHeight="450" d:DesignWidth="800"
              prism:ViewModelLocator.AutoWireViewModel="True">
 
-    <Grid Margin="15">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-        <StackPanel>
-            <Border Margin="0 0 0 10" HorizontalAlignment="Center" Width="800" Height="600"
+            <StackPanel>
+                <Border Margin="0 0 0 10" HorizontalAlignment="Center" Width="800" Height="600"
                     BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="1">
-                <Canvas MouseWheel="OnCanvasMouseWheel">
-                    <Canvas.Background>
-                        <ImageBrush x:Name="EditingImage" Stretch="None" ImageSource="{Binding SourcePath}">
-                            <ImageBrush.Transform>
-                                <ScaleTransform ScaleX="1" ScaleY="1" CenterX="0.5" CenterY="0.5" />
-                            </ImageBrush.Transform>
-                        </ImageBrush>
-                    </Canvas.Background>
-                </Canvas>
-            </Border>
+                    <Canvas MouseWheel="OnCanvasMouseWheel">
+                        <Canvas.Background>
+                            <ImageBrush x:Name="EditingImage" Stretch="None" ImageSource="{Binding SourcePath}">
+                                <ImageBrush.Transform>
+                                    <ScaleTransform ScaleX="1" ScaleY="1" CenterX="0.5" CenterY="0.5" />
+                                </ImageBrush.Transform>
+                            </ImageBrush>
+                        </Canvas.Background>
+                    </Canvas>
+                </Border>
 
-            <Button HorizontalAlignment="Left" Width="150" Content="Convert" Command="{Binding ConvertCommand}" />
+                <mah:ToggleSwitch Margin="0 0 0 10" IsOn="{Binding Options.Resizing.ResizeImage}" Content="Resize image" />
 
-        </StackPanel>
+                <StackPanel Margin="0 0 0 10" Orientation="Horizontal"
+                            Visibility="{Binding Options.Resizing.ResizeImage, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-    </Grid>
+                    <mah:NumericUpDown Value="{Binding Options.Resizing.Width}" Width="150" Margin="0 0 10 0" />
+                    <mah:NumericUpDown Value="{Binding Options.Resizing.Height}" Width="150" />
+
+                    <ComboBox Width="150" Margin="0 0 10 0" SelectedValue="{Binding Options.Resizing.Option}" SelectedValuePath="Tag">
+                        <ComboBoxItem Content="Standard" Tag="{x:Static image:ResizeOption.Standard}" />
+                        <ComboBoxItem Content="Adaptive" Tag="{x:Static image:ResizeOption.Adaptive}" />
+                        <ComboBoxItem Content="Interpolative" Tag="{x:Static image:ResizeOption.Interpolative}" />
+                    </ComboBox>
+                </StackPanel>
+
+                <Button HorizontalAlignment="Left" Width="150" Content="Convert" Command="{Binding ConvertCommand}" />
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
+
 </UserControl>
