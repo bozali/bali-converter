@@ -23,7 +23,9 @@
             {
                 this.configuration = new Configuration
                 {
-                    DownloadDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic))
+                    DownloadDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic)),
+                    FirstTime = true,
+                    Minimize = true
                 };
 
                 this.Save(this.configuration);

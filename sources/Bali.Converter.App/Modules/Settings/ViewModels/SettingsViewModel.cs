@@ -12,12 +12,14 @@
         private readonly IConfigurationService configurationService;
 
         private string downloadDir;
+        private bool minimize;
 
         public SettingsViewModel(IConfigurationService configurationService)
         {
             this.configurationService = configurationService;
 
             this.DownloadDir = this.configurationService.Configuration.DownloadDir;
+            this.Minimize = this.configurationService.Configuration.Minimize;
 
             this.SaveCommand = new DelegateCommand(this.Save, () => this.HasChanges);
             this.SelectDownloadDirCommand = new DelegateCommand(this.SelectDownloadDir);
@@ -42,9 +44,23 @@
             }
         }
 
+        public bool Minimize
+        {
+            get => this.minimize;
+            set
+            {
+                if (this.SetProperty(ref this.minimize, value))
+                {
+                    this.RaisePropertyChanged(nameof(this.HasChanges));
+                    this.SaveCommand?.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
         public bool HasChanges
         {
-            get => this.DownloadDir != this.configurationService.Configuration.DownloadDir;
+            get => this.DownloadDir != this.configurationService.Configuration.DownloadDir ||
+                   this.Minimize != this.configurationService.Configuration.Minimize;
         }
 
         private void Save()
@@ -52,8 +68,11 @@
             // TODO Request if the user really wants to save the changes.
             this.configurationService.Save(new Configuration
             {
-                DownloadDir = this.DownloadDir
+                DownloadDir = this.DownloadDir,
+                Minimize = this.Minimize
             });
+
+            this.SaveCommand?.RaiseCanExecuteChanged();
         }
 
         private void SelectDownloadDir()

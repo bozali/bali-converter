@@ -6,9 +6,12 @@
                  xmlns:local="clr-namespace:Bali.Converter.App"
                  xmlns:prism="http://prismlibrary.com/"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                 mc:Ignorable="d"
+                 xmlns:vm="clr-namespace:Bali.Converter.App.ViewModels"
+                 mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
                  WindowStartupLocation="CenterScreen"
-                 Title="Bali Converter" Height="756" Width="1200">
+                 Title="Bali Converter" Height="756" Width="1200"
+                 prism:ViewModelLocator.AutoWireViewModel="True"
+                 mah:DialogParticipation.Register="{Binding}">
 
     <mah:MetroWindow.Resources>
         <ResourceDictionary>

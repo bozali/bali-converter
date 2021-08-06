@@ -9,5 +9,11 @@
     {
         [XmlAttribute]
         public string DownloadDir { get; set; }
+
+        [XmlAttribute]
+        public bool FirstTime { get; set; }
+
+        [XmlAttribute]
+        public bool Minimize { get; set; }
     }
 }

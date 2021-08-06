@@ -2,7 +2,7 @@
 {
     using System;
     using System.IO;
-    using System.Runtime.CompilerServices;
+
     using Bali.Converter.App.Modules.Settings;
 
     public interface IConfigurationService

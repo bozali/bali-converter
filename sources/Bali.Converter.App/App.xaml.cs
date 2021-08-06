@@ -17,6 +17,7 @@
     using Bali.Converter.App.Modules.Settings.Views;
     using Bali.Converter.App.Profiles;
     using Bali.Converter.App.Services;
+    using Bali.Converter.App.ViewModels;
     using Bali.Converter.App.Workers;
     using Bali.Converter.FFmpeg;
     using Bali.Converter.YoutubeDl;
@@ -58,6 +59,8 @@
             containerRegistry.RegisterForNavigation<ConversionView, ConversionViewModel>();
             containerRegistry.RegisterForNavigation<VideoConversionView, VideoConversionViewModel>();
             containerRegistry.RegisterForNavigation<ImageConversionView, ImageConversionViewModel>();
+
+            containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
 
             containerRegistry.Register<DownloadBackgroundWorker>();
         }

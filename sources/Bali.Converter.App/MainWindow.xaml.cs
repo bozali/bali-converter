@@ -1,14 +1,14 @@
 ﻿namespace Bali.Converter.App
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Media;
+    using Bali.Converter.App.Events;
     using Bali.Converter.App.Modules.MediaDownloader.Views;
+    using Bali.Converter.App.ViewModels;
+
     using ControlzEx.Theming;
+
     using MahApps.Metro.Controls;
 
+    using Prism.Events;
     using Prism.Regions;
 
     using Unity;
@@ -17,9 +17,17 @@
     {
         private readonly IRegionManager regionManager;
 
-        public MainWindow(IRegionManager regionManager, IUnityContainer container)
+        public MainWindow(IRegionManager regionManager, IUnityContainer container, IEventAggregator eventAggregator)
         {
             this.InitializeComponent();
+
+            eventAggregator.GetEvent<WindowStateChangedEvent>().Subscribe(this.OnWindowStateChanged);
+
+            this.Closing += async (s, e) =>
+                            {
+                                e.Cancel = true;
+                                await ((MainWindowViewModel) this.DataContext).OnWindowClosing(s, e);
+                            };
 
             ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncAll;
             ThemeManager.Current.SyncTheme();
@@ -35,21 +43,16 @@
             this.regionManager.Regions["ContentRegion"].RequestNavigate(item.Tag.ToString());
         }
 
-        public IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        private void OnWindowStateChanged(bool show)
         {
-            if (depObj != null)
+            if (show)
             {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
-                {
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
-
-                    if (child != null && child is T)
-                        yield return (T)child;
-
-                    foreach (T childOfChild in FindVisualChildren<T>(child))
-                        yield return childOfChild;
-                }
+                this.Show();
+                this.Focus();
+                return;
             }
+
+            this.Hide();
         }
     }
 }
