@@ -63,7 +63,11 @@
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
 
             containerRegistry.Register<DownloadBackgroundWorker>();
+
+            App.IsMinimized = false;
         }
+
+        public static bool IsMinimized { get; set; }
 
         protected override Window CreateShell()
         {

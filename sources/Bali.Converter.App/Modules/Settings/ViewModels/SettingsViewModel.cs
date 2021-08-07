@@ -12,14 +12,20 @@
         private readonly IConfigurationService configurationService;
 
         private string downloadDir;
+        private int bandwidthMinimized;
+        private int bandwidth;
         private bool minimize;
 
         public SettingsViewModel(IConfigurationService configurationService)
         {
             this.configurationService = configurationService;
 
-            this.DownloadDir = this.configurationService.Configuration.DownloadDir;
-            this.Minimize = this.configurationService.Configuration.Minimize;
+            var configuration = this.configurationService.Configuration;
+
+            this.DownloadDir = configuration.DownloadDir;
+            this.Minimize = configuration.Minimize;
+            this.Bandwidth = configuration.Bandwidth;
+            this.BandwidthMinimized = configuration.BandwidthMinimized;
 
             this.SaveCommand = new DelegateCommand(this.Save, () => this.HasChanges);
             this.SelectDownloadDirCommand = new DelegateCommand(this.SelectDownloadDir);
@@ -57,10 +63,38 @@
             }
         }
 
+        public int Bandwidth
+        {
+            get => this.bandwidth;
+            set
+            {
+                if (this.SetProperty(ref this.bandwidth, value))
+                {
+                    this.RaisePropertyChanged(nameof(this.HasChanges));
+                    this.SaveCommand?.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public int BandwidthMinimized
+        {
+            get => this.bandwidthMinimized;
+            set
+            {
+                if (this.SetProperty(ref this.bandwidthMinimized, value))
+                {
+                    this.RaisePropertyChanged(nameof(this.HasChanges));
+                    this.SaveCommand?.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
         public bool HasChanges
         {
             get => this.DownloadDir != this.configurationService.Configuration.DownloadDir ||
-                   this.Minimize != this.configurationService.Configuration.Minimize;
+                   this.Minimize != this.configurationService.Configuration.Minimize ||
+                   this.Bandwidth != this.configurationService.Configuration.Bandwidth ||
+                   this.BandwidthMinimized != this.configurationService.Configuration.BandwidthMinimized;
         }
 
         private void Save()
@@ -69,7 +103,9 @@
             this.configurationService.Save(new Configuration
             {
                 DownloadDir = this.DownloadDir,
-                Minimize = this.Minimize
+                Minimize = this.Minimize,
+                Bandwidth = this.Bandwidth,
+                BandwidthMinimized = this.BandwidthMinimized
             });
 
             this.SaveCommand?.RaiseCanExecuteChanged();

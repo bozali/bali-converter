@@ -88,7 +88,14 @@
                     this.logger.Debug($"Download Path: {downloadPath}");
                     this.logger.Debug($"Destination Path: {destinationPath}");
 
-                    await this.youtubedl.Download(job.Url, downloadPathPattern, job.TargetFormat,
+                    var options = new DownloadOptions
+                    {
+                        DownloadBandwidth = App.IsMinimized ? this.configurationService.Configuration.BandwidthMinimized : this.configurationService.Configuration.Bandwidth,
+                        DownloadFormat = job.TargetFormat,
+                        Destination = downloadPathPattern,
+                    };
+
+                    await this.youtubedl.Download(job.Url, options,
                                                   (f, s) =>
                                                   {
                                                       job.Progress = f;
@@ -108,7 +115,7 @@
                 }
                 catch (Exception e)
                 {
-                    // TODO
+                    this.logger.Error($"Failed downloading", e);
                 }
                 finally
                 {

@@ -146,18 +146,32 @@
             }
         }
 
-        public async Task Download(string url, string path, MediaFormat format, Action<float, string> progressReport = null, CancellationToken ct = default)
+        public async Task Download(string url, DownloadOptions options, Action<float, string> progressReport = null, CancellationToken ct = default)
         {
             var arguments = new List<string>();
-            arguments.Add($@"--output ""{path}""");
+            arguments.Add($@"--output ""{options.Destination}""");
             arguments.Add($@"""{url}""");
             arguments.Add($@"--format best");
             arguments.Add($@"--no-playlist");
 
-            if (format != MediaFormat.MP4)
+            if (options.DownloadFormat.IsAudioOnly())
             {
-                arguments.Add($@"--recode-video {format.ToString("G").ToLowerInvariant()}");
+                arguments.Add("--extract-audio");
+                arguments.Add($@"--audio-format {options.DownloadFormat.ToString("G").ToLowerInvariant()}");
+            }
+            else if (options.DownloadFormat != MediaFormat.MP4)
+            {
+                arguments.Add($@"--recode-video {options.DownloadFormat.ToString("G").ToLowerInvariant()}");
+            }
+
+            if (options.DownloadFormat != MediaFormat.MP4)
+            {
                 arguments.Add($@"--ffmpeg-location ""{this.ffmpeg}""");
+            }
+
+            if (options.DownloadBandwidth != -1)
+            {
+                arguments.Add($@"--http-chunk-size {options.DownloadBandwidth}");
             }
 
             var percentageReg = new Regex(@"([^\s]+)\%");

@@ -15,5 +15,11 @@
 
         [XmlAttribute]
         public bool Minimize { get; set; }
+
+        [XmlAttribute]
+        public int Bandwidth { get; set; }
+
+        [XmlAttribute]
+        public int BandwidthMinimized { get; set; }
     }
 }

@@ -25,7 +25,9 @@
                 {
                     DownloadDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic)),
                     FirstTime = true,
-                    Minimize = true
+                    Minimize = true,
+                    Bandwidth = -1,
+                    BandwidthMinimized = -1
                 };
 
                 this.Save(this.configuration);

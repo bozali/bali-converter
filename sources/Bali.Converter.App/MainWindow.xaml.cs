@@ -26,7 +26,7 @@
             this.Closing += async (s, e) =>
                             {
                                 e.Cancel = true;
-                                await ((MainWindowViewModel) this.DataContext).OnWindowClosing(s, e);
+                                await ((MainWindowViewModel)this.DataContext).OnWindowClosing(s, e);
                             };
 
             ThemeManager.Current.ThemeSyncMode = ThemeSyncMode.SyncAll;
@@ -49,10 +49,12 @@
             {
                 this.Show();
                 this.Focus();
+                App.IsMinimized = false;
                 return;
             }
 
             this.Hide();
+            App.IsMinimized = true;
         }
     }
 }

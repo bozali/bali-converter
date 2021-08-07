@@ -28,4 +28,18 @@
 
         Avi
     }
+
+    public static class MediaFormatExtensions
+    {
+        public static bool IsAudioOnly(this MediaFormat format)
+        {
+            return format == MediaFormat.Aac ||
+                   format == MediaFormat.Flac ||
+                   format == MediaFormat.MP3 ||
+                   format == MediaFormat.M4a ||
+                   format == MediaFormat.Opus ||
+                   format == MediaFormat.Vorbis ||
+                   format == MediaFormat.Wav;
+        }
+    }
 }
