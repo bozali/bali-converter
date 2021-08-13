@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Assets\Images\" />
-    <Folder Include="Modules\Conversion\Video\ViewModel\" />
     <Folder Include="Tools\" />
   </ItemGroup>
 

@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:Bali.Converter.App.Modules.Conversion.Video.View"
              xmlns:vm="clr-namespace:Bali.Converter.App.Modules.Conversion.Video.ViewModel"
              xmlns:prism="http://prismlibrary.com/"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:filters="clr-namespace:Bali.Converter.App.Modules.Conversion.Filters.ViewModels"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:VideoConversionEditorViewModel}"
              d:DesignHeight="450" d:DesignWidth="800"
              prism:ViewModelLocator.AutoWireViewModel="True">
@@ -16,12 +19,72 @@
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-            <StackPanel HorizontalAlignment="Left">
+            <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0 0 0 10">
                 <MediaElement Source="{Binding SourcePath}" Width="480" Height="272"
-                              LoadedBehavior="Manual" Stretch="Fill" x:Name="Media" />
+                              LoadedBehavior="Manual" Stretch="Fill" x:Name="Media"
+                              Margin="0 0 0 10" />
 
+                <Slider Margin="0 0 0 10" Minimum="0" Maximum="{Binding Metadata.MaximumLength}" Value="{Binding MediaPosition}" />
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Margin="0 0 10 0" Width="32" Height="32" Padding="2 0 0 0" Command="{Binding PlayPauseCommand}">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource MahApps.Styles.Button.Circle}" TargetType="{x:Type Button}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsMediaPlaying}" Value="True">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <icon:PackIconMaterial Kind="Pause" Width="12" Height="12" Padding="0 0 2 0" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding IsMediaPlaying}" Value="False">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <icon:PackIconMaterial Kind="Play" Width="12" Height="12" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="32" Height="32" Command="{Binding StopCommand}">
+                        <icon:PackIconMaterial Kind="Stop" Width="12" Height="12" />
+                    </Button>
+                </StackPanel>
             </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.Column="0">
+                <mah:DropDownButton Margin="0 0 0 10" Content="Filters" ItemsSource="{Binding SupportedFilters}">
+                    <mah:DropDownButton.Icon>
+                        <icon:PackIconMaterial Kind="AirFilter" />
+                    </mah:DropDownButton.Icon>
+                </mah:DropDownButton>
+
+                <ListBox ItemsSource="{Binding Filters}" SelectedValue="{Binding SelectedFilter}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate d:DataContext="{d:DesignInstance filters:FilterBaseViewModel}">
+                            <StackPanel Orientation="Horizontal">
+                                <icon:PackIconMaterial Margin="0 0 20 0" Kind="{Binding Icon}" />
+                                <TextBlock Text="{Binding DisplayName}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Grid.Column="1" Margin="10 0 0 0">
+                <ItemsControl prism:RegionManager.RegionName="FilterRegion" />
+            </Grid>
         </Grid>
     </ScrollViewer>
 </UserControl>

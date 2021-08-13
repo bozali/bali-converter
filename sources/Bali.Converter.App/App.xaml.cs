@@ -5,7 +5,8 @@
     using System.Windows;
 
     using AutoMapper;
-
+    using Bali.Converter.App.Modules.Conversion.Filters.ViewModels;
+    using Bali.Converter.App.Modules.Conversion.Filters.Views;
     using Bali.Converter.App.Modules.Conversion.Video.View;
     using Bali.Converter.App.Modules.Conversion.Video.ViewModel;
     using Bali.Converter.App.Modules.Conversion.View;
@@ -61,6 +62,10 @@
 
             containerRegistry.RegisterForNavigation<ConversionSelectionView, ConversionSelectionViewModel>();
             containerRegistry.RegisterForNavigation<VideoConversionEditorView, VideoConversionEditorViewModel>();
+
+            // Filter views
+            containerRegistry.RegisterForNavigation<VolumeFilterView, VolumeFilterViewModel>();
+            containerRegistry.RegisterForNavigation<RotationFilterView, RotationFilterViewModel>();
 
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
 
