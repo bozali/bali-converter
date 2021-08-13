@@ -6,8 +6,10 @@
 
     using AutoMapper;
 
-    using Bali.Converter.App.Modules.Conversion.ViewModels;
-    using Bali.Converter.App.Modules.Conversion.Views;
+    using Bali.Converter.App.Modules.Conversion.Video.View;
+    using Bali.Converter.App.Modules.Conversion.Video.ViewModel;
+    using Bali.Converter.App.Modules.Conversion.View;
+    using Bali.Converter.App.Modules.Conversion.ViewModel;
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Modules.Downloads.ViewModels;
     using Bali.Converter.App.Modules.Downloads.Views;
@@ -19,6 +21,7 @@
     using Bali.Converter.App.Services;
     using Bali.Converter.App.ViewModels;
     using Bali.Converter.App.Workers;
+    using Bali.Converter.Common.Conversion;
     using Bali.Converter.FFmpeg;
     using Bali.Converter.YoutubeDl;
 
@@ -56,13 +59,14 @@
             containerRegistry.RegisterForNavigation<DownloadsView, DownloadsViewModel>();
             containerRegistry.RegisterForNavigation<SettingsView, SettingsViewModel>();
 
-            containerRegistry.RegisterForNavigation<ConversionView, ConversionViewModel>();
-            containerRegistry.RegisterForNavigation<VideoConversionView, VideoConversionViewModel>();
-            containerRegistry.RegisterForNavigation<ImageConversionView, ImageConversionViewModel>();
+            containerRegistry.RegisterForNavigation<ConversionSelectionView, ConversionSelectionViewModel>();
+            containerRegistry.RegisterForNavigation<VideoConversionEditorView, VideoConversionEditorViewModel>();
 
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
 
             containerRegistry.Register<DownloadBackgroundWorker>();
+
+            containerRegistry.RegisterConversions();
 
             App.IsMinimized = false;
         }

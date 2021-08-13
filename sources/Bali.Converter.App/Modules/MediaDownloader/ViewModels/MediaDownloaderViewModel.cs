@@ -54,7 +54,7 @@
             this.DownloadCommand = new DelegateCommand(async () => await this.Download(), () => !string.IsNullOrEmpty(this.Url));
             this.EditCommand = new DelegateCommand(async () => await this.Edit(), () => !string.IsNullOrEmpty(this.Url));
 
-            this.Format = MediaFormat.MP4.ToString();
+            this.Format = FileExtension.MP4.ToString();
         }
 
         public string Url
@@ -202,7 +202,7 @@
             var job = new DownloadJob
             {
                 ThumbnailPath = (await this.DownloadThumbnail(video)).Path,
-                TargetFormat = Enum.Parse<MediaFormat>(this.Format, true),
+                TargetFormat = Enum.Parse<FileExtension>(this.Format, true),
                 Url = this.Url,
                 Tags = new MediaTags
                 {

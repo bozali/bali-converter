@@ -159,12 +159,12 @@
                 arguments.Add("--extract-audio");
                 arguments.Add($@"--audio-format {options.DownloadFormat.ToString("G").ToLowerInvariant()}");
             }
-            else if (options.DownloadFormat != MediaFormat.MP4)
+            else if (options.DownloadFormat != FileExtension.MP4)
             {
                 arguments.Add($@"--recode-video {options.DownloadFormat.ToString("G").ToLowerInvariant()}");
             }
 
-            if (options.DownloadFormat != MediaFormat.MP4)
+            if (options.DownloadFormat != FileExtension.MP4)
             {
                 arguments.Add($@"--ffmpeg-location ""{this.ffmpeg}""");
             }

@@ -1,10 +1,13 @@
 ﻿namespace Bali.Converter.FFmpeg
 {
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Bali.Converter.Common;
-    using Bali.Converter.FFmpeg.Models;
+    using Bali.Converter.FFmpeg.Filters.Audio;
+    using Bali.Converter.FFmpeg.Filters.Video;
 
     public class FFmpeg : IFFmpeg
     {
@@ -28,10 +31,35 @@
                 arguments.Add("-loop 1");
             }
 
+            arguments.Add(this.BuildFilterArguments(options.Filters));
+
             arguments.Add($@"""{destination}""");
 
             using var process = new ProcessWrapper(this.ffmpegPath);
             await process.Execute(string.Join(' ', arguments));
+        }
+
+        private string BuildFilterArguments(IEnumerable filters)
+        {
+            object[] enumerable = filters as object[] ?? filters.Cast<object>().ToArray();
+
+            var videoFilters = enumerable.OfType<IVideoFilter>().ToArray();
+            var audioFilters = enumerable.OfType<IAudioFilter>().ToArray();
+
+            string videoFiltersArgument = string.Empty;
+            string audioFiltersArgument = string.Empty;
+
+            if (videoFilters.Any())
+            {
+                videoFiltersArgument += $"-vf {string.Join(' ', videoFilters.Select(f => $@"""{f.GetArgument()}"""))}";
+            }
+
+            if (audioFilters.Any())
+            {
+                audioFiltersArgument += $"-vf {string.Join(' ', audioFilters.Select(f => $@"""{f.GetArgument()}"""))}";
+            }
+
+            return string.Join(' ', videoFiltersArgument, audioFiltersArgument);
         }
     }
 }

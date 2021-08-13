@@ -17,7 +17,7 @@
 
         Task<DownloadJob> Get();
         
-        void Add(string url, MediaFormat format, MediaTags tags);
+        void Add(string url, FileExtension format, MediaTags tags);
 
         void Add(DownloadJob job);
 

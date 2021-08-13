@@ -59,7 +59,7 @@
                 Tags = this.mapper.Map<MediaTags>(this.Video.Tags),
                 Url = this.Video.Url,
                 ThumbnailPath = this.Video.ThumbnailPath,
-                TargetFormat = Enum.Parse<MediaFormat>(this.Video.Format, true)
+                TargetFormat = Enum.Parse<FileExtension>(this.Video.Format, true)
             };
 
             this.downloadRegistry.Add(job);

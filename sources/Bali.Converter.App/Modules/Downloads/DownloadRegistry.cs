@@ -44,7 +44,7 @@
             return found.Value;
         }
         
-        public void Add(string url, MediaFormat format, MediaTags tags)
+        public void Add(string url, FileExtension format, MediaTags tags)
         {
             var job = new DownloadJob
             {

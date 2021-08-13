@@ -28,7 +28,7 @@
         public string Url { get; set; }
 
         [XmlAttribute]
-        public MediaFormat TargetFormat { get; set; }
+        public FileExtension TargetFormat { get; set; }
 
         [XmlAttribute]
         public string ThumbnailPath { get; set; }

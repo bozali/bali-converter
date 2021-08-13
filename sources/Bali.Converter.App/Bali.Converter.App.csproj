@@ -21,10 +21,12 @@
 
   <ItemGroup>
     <Folder Include="Assets\Images\" />
+    <Folder Include="Modules\Conversion\Video\ViewModel\" />
     <Folder Include="Tools\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bali.Converter.Common.Conversion\Bali.Converter.Common.Conversion.csproj" />
     <ProjectReference Include="..\Bali.Converter.FFmpeg\Bali.Converter.FFmpeg.csproj" />
     <ProjectReference Include="..\Bali.Converter.YoutubeDl\Bali.Converter.YoutubeDl.csproj" />
   </ItemGroup>

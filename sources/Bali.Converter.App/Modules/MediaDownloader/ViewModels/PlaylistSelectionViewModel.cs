@@ -99,7 +99,7 @@
             {
                 this.downloadRegistry.Add(new DownloadJob
                 {
-                    TargetFormat = Enum.Parse<MediaFormat>(video.Format, true),
+                    TargetFormat = Enum.Parse<FileExtension>(video.Format, true),
                     Tags = this.mapper.Map<MediaTags>(video.Tags),
                     ThumbnailPath = video.ThumbnailPath,
                     Url = video.Url,

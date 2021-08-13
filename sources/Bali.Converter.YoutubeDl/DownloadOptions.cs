@@ -8,6 +8,6 @@
 
         public string Destination { get; set; }
 
-        public MediaFormat DownloadFormat { get; set; }
+        public FileExtension DownloadFormat { get; set; }
     }
 }
