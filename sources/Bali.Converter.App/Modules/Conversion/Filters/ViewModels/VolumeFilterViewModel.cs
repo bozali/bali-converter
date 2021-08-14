@@ -1,5 +1,7 @@
 ﻿namespace Bali.Converter.App.Modules.Conversion.Filters.ViewModels
 {
+    using System;
+
     using MahApps.Metro.IconPacks;
 
     public class VolumeFilterViewModel : FilterBaseViewModel
@@ -9,7 +11,7 @@
         private bool useDecibel;
 
         public VolumeFilterViewModel()
-            : base("Volume")
+            : base(FilterNameConstants.Audio.Volume)
         {
             this.Multiplier = 1.0f;
         }
@@ -17,7 +19,7 @@
         public float Multiplier
         {
             get => this.multiplier;
-            set => this.SetProperty(ref this.multiplier, value);
+            set => this.SetProperty(ref this.multiplier, MathF.Round(value, 1));
         }
 
         public int Decibel

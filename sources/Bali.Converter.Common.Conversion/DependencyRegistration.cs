@@ -12,10 +12,16 @@
         {
             container.RegisterSingleton<IConversionProvider, ConversionProvider>();
 
+            // Audio formats
             container.Register<Mp3Conversion>();
+            container.Register<WavConversion>();
+
+            // Video formats
             container.Register<Mp4Conversion>();
-            container.Register<GifConversion>();
             container.Register<AviConversion>();
+
+            // Image formats
+            container.Register<GifConversion>();
         }
     }
 }

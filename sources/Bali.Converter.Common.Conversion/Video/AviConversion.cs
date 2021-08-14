@@ -5,12 +5,20 @@
     using Bali.Converter.Common.Conversion.Attributes;
     using Bali.Converter.Common.Conversion.Audio;
     using Bali.Converter.Common.Enums;
+    using Bali.Converter.FFmpeg;
 
     [Extension(FileExtensionConstants.Video.Avi)]
     [Target(typeof(Mp4Conversion))]
     [Target(typeof(Mp3Conversion))]
     public class AviConversion : ConversionBase<AviConversion>, IVideoConversion, IAudioConversion
     {
+        private readonly IFFmpeg ffmpeg;
+
+        public AviConversion(IFFmpeg ffmpeg)
+        {
+            this.ffmpeg = ffmpeg;
+        }
+
         public override ConversionTopology Topology
         {
             get => ConversionTopology.Video | ConversionTopology.Audio;
@@ -20,9 +28,12 @@
 
         public AudioConversionOptions AudioConversionOptions { get; set; }
 
-        public override Task Convert(string path)
+        public override async Task Convert(string source, string destination)
         {
-            return Task.CompletedTask;
+            await this.ffmpeg.Convert(source, destination, new Converter.FFmpeg.VideoConversionOptions
+            {
+                Filters = this.VideoConversionOptions.VideoFilters
+            });
         }
     }
 }

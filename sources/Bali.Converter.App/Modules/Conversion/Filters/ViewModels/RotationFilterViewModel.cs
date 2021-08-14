@@ -7,7 +7,7 @@
         private int rotation;
 
         public RotationFilterViewModel()
-            : base("Rotation")
+            : base(FilterNameConstants.Video.Rotation)
         {
         }
 

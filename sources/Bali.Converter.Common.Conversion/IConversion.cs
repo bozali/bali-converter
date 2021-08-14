@@ -13,6 +13,6 @@
 
         Type[] SupportedTargets { get; }
 
-        Task Convert(string path);
+        Task Convert(string source, string destination);
     }
 }

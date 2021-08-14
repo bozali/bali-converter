@@ -18,6 +18,6 @@
 
         public Type[] SupportedTargets { get; }
 
-        public abstract Task Convert(string path);
+        public abstract Task Convert(string source, string destination);
     }
 }

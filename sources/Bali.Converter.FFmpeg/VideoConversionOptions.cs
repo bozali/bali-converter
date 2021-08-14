@@ -6,11 +6,9 @@
     {
         public int Fps { get; set; }
 
-        public int From { get; set; }
+        //public int From { get; set; }
 
-        public int To { get; set; }
-
-        public int Quality { get; set; }
+        //public int To { get; set; }
 
         public IFilter[] Filters { get; set; }
     }

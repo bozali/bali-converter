@@ -19,7 +19,7 @@
 
         public VideoConversionOptions VideoConversionOptions { get; set; }
 
-        public override Task Convert(string path)
+        public override Task Convert(string source, string destination)
         {
             return Task.CompletedTask;
         }

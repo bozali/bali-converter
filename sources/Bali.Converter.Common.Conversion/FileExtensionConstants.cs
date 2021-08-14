@@ -5,6 +5,7 @@
         public class Audio
         {
             public const string Mp3 = "mp3";
+            public const string Wav = "wav";
         }
 
         public class Video

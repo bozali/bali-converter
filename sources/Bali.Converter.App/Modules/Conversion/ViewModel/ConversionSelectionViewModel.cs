@@ -64,7 +64,8 @@
             parameters.Add("Conversion", conversion);
             parameters.Add("SourcePath", this.sourcePath);
 
-            if (conversion.Topology.HasFlag(ConversionTopology.Video))
+            if (conversion.Topology.HasFlag(ConversionTopology.Video) ||
+                conversion.Topology.HasFlag(ConversionTopology.Audio))
             {
                 this.regionManager.RequestNavigate("ContentRegion", nameof(VideoConversionEditorView), parameters);
             }

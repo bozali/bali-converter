@@ -2,11 +2,11 @@
 {
     public class RotationFilter : IVideoFilter
     {
-        public int Value { get; set; }
+        public int Rotation { get; set; }
 
         public string GetArgument()
         {
-            return $"rotate={this.Value}*PI/180";
+            return $"rotate={this.Rotation}*PI/180";
         }
     }
 }

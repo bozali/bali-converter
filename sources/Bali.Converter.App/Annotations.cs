@@ -68,7 +68,7 @@ namespace Bali.Converter.App.Annotations
   /// <summary>
   /// Can be applied to symbols of types derived from IEnumerable as well as to symbols of Task
   /// and Lazy classes to indicate that the value of a collection item, of the Task.Result property
-  /// or of the Lazy.Value property can never be null.
+  /// or of the Lazy.Rotation property can never be null.
   /// </summary>
   /// <example><code>
   /// public void Foo([ItemNotNull]List&lt;string&gt; books)
@@ -87,7 +87,7 @@ namespace Bali.Converter.App.Annotations
   /// <summary>
   /// Can be applied to symbols of types derived from IEnumerable as well as to symbols of Task
   /// and Lazy classes to indicate that the value of a collection item, of the Task.Result property
-  /// or of the Lazy.Value property can be null.
+  /// or of the Lazy.Rotation property can be null.
   /// </summary>
   /// <example><code>
   /// public void Foo([ItemCanBeNull]List&lt;string&gt; books)
@@ -304,14 +304,14 @@ namespace Bali.Converter.App.Annotations
   /// <list>
   /// <item>FDT      ::= FDTRow [;FDTRow]*</item>
   /// <item>FDTRow   ::= Input =&gt; Output | Output &lt;= Input</item>
-  /// <item>Input    ::= ParameterName: Value [, Input]*</item>
-  /// <item>Output   ::= [ParameterName: Value]* {halt|stop|void|nothing|Value}</item>
-  /// <item>Value    ::= true | false | null | notnull | canbenull</item>
+  /// <item>Input    ::= ParameterName: Rotation [, Input]*</item>
+  /// <item>Output   ::= [ParameterName: Rotation]* {halt|stop|void|nothing|Rotation}</item>
+  /// <item>Rotation    ::= true | false | null | notnull | canbenull</item>
   /// </list>
   /// If the method has a single input parameter, its name could be omitted.<br/>
   /// Using <c>halt</c> (or <c>void</c>/<c>nothing</c>, which is the same) for the method output
   /// means that the method doesn't return normally (throws or terminates the process).<br/>
-  /// Value <c>canbenull</c> is only applicable for output parameters.<br/>
+  /// Rotation <c>canbenull</c> is only applicable for output parameters.<br/>
   /// You can use multiple <c>[ContractAnnotation]</c> for each FDT row, or use single attribute
   /// with rows separated by semicolon. There is no notion of order rows, all rows are checked
   /// for applicability and applied per each program state tracked by the analysis engine.<br/>

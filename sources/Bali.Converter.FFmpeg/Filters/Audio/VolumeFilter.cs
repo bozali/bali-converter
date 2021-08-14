@@ -2,11 +2,17 @@
 {
     public class VolumeFilter : IAudioFilter
     {
-        public float MultiplierValue { get; set; }
+        public float Multiplier { get; set; }
+
+        public int Decibel { get; set; }
+
+        public bool UseDecibel { get; set; }
 
         public string GetArgument()
         {
-            return $"volume={this.MultiplierValue}";
+            return !this.UseDecibel
+                ? $"volume={this.Multiplier}"
+                : $"volume={this.Decibel}dB";
         }
     }
 }
