@@ -16,6 +16,7 @@
 
             this.CreateMap<RotationFilter, RotationFilterViewModel>().ReverseMap();
             this.CreateMap<VolumeFilter, VolumeFilterViewModel>().ReverseMap();
+            this.CreateMap<FpsFilter, FpsFilterViewModel>().ReverseMap();
         }
     }
 }

@@ -196,7 +196,7 @@
 
             if (this.conversion.Topology.HasFlag(ConversionTopology.Video))
             {
-                this.SupportedFilters.AddRange(new[] { FilterNameConstants.Video.Rotation });
+                this.SupportedFilters.AddRange(new[] { FilterNameConstants.Video.Rotation, FilterNameConstants.Video.Fps });
             }
         }
 
@@ -276,14 +276,15 @@
 
         private void AddFilter(string filter)
         {
+            // TODO Register these types 
             switch (filter)
             {
                 case "Rotation":
-                    this.Filters.Add(new RotationFilterViewModel());
+                    this.Filters.Add(this.container.Resolve(typeof(RotationFilterViewModel)) as FilterBaseViewModel);
                     break;
 
                 case "Volume":
-                    this.Filters.Add(new VolumeFilterViewModel());
+                    this.Filters.Add(this.container.Resolve(typeof(VolumeFilterViewModel)) as FilterBaseViewModel);
                     break;
             }
         }
@@ -300,6 +301,10 @@
                 if (filter.DisplayName == FilterNameConstants.Video.Rotation)
                 {
                     yield return this.mapper.Map<RotationFilterViewModel, RotationFilter>((RotationFilterViewModel)filter);
+                }
+                else if (filter.DisplayName == FilterNameConstants.Video.Fps)
+                {
+                    yield return this.mapper.Map<FpsFilterViewModel, FpsFilter>((FpsFilterViewModel)filter);
                 }
             }
         }

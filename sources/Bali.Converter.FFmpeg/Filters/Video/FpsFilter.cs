@@ -1,10 +1,12 @@
 ﻿namespace Bali.Converter.FFmpeg.Filters.Video
 {
-    public class VideoScaling : IVideoFilter
+    public class FpsFilter : IVideoFilter
     {
+        public int Fps { get; set; }
+
         public string GetArgument()
         {
-            return @"scale=";
+            return $"fps={this.Fps}";
         }
     }
 }

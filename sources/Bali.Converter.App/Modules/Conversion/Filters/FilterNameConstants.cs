@@ -1,5 +1,7 @@
 ﻿namespace Bali.Converter.App.Modules.Conversion.Filters
 {
+    using System.Security.RightsManagement;
+
     public class FilterNameConstants
     {
         public class Audio
@@ -10,6 +12,7 @@
         public class Video
         {
             public const string Rotation = "Rotation";
+            public const string Fps = "FPS";
         }
     }
 }

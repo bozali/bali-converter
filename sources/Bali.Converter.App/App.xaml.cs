@@ -5,6 +5,7 @@
     using System.Windows;
 
     using AutoMapper;
+    using Bali.Converter.App.Modules.Conversion.Filters;
     using Bali.Converter.App.Modules.Conversion.Filters.ViewModels;
     using Bali.Converter.App.Modules.Conversion.Filters.Views;
     using Bali.Converter.App.Modules.Conversion.Video.View;
@@ -66,6 +67,7 @@
             // Filter views
             containerRegistry.RegisterForNavigation<VolumeFilterView, VolumeFilterViewModel>();
             containerRegistry.RegisterForNavigation<RotationFilterView, RotationFilterViewModel>();
+            containerRegistry.RegisterForNavigation<FpsFilterView, FpsFilterViewModel>();
 
             containerRegistry.RegisterForNavigation<MainWindow, MainWindowViewModel>();
 
