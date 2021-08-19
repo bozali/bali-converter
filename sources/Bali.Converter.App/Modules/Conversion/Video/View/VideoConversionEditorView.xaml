@@ -12,7 +12,8 @@
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:VideoConversionEditorViewModel}"
              d:DesignHeight="450" d:DesignWidth="800"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             mah:DialogParticipation.Register="{Binding}">
+             mah:DialogParticipation.Register="{Binding}"
+             x:Name="EditorControl">
 
     <ScrollViewer>
         <Grid Margin="15">
@@ -32,6 +33,16 @@
                               Margin="0 0 0 10" />
 
                 <Slider Margin="0 0 0 10" Minimum="0" Maximum="{Binding Metadata.MaximumLength}" Value="{Binding MediaPosition}" />
+                <TextBlock HorizontalAlignment="Center">
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}:{1:00}">
+                                <Binding Path="Position.Minutes" FallbackValue="0" />
+                                <Binding Path="Position.Seconds" FallbackValue="0" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </TextBlock>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Margin="0 0 10 0" Width="32" Height="32" Padding="2 0 0 0" Command="{Binding PlayPauseCommand}">
@@ -71,10 +82,89 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0">
+                    <mah:RangeSlider Margin="0 0 0 10"
+                                     Minimum="0"
+                                     Maximum="{Binding Metadata.MaximumLength}"
+                                     LowerValue="{Binding VideoConversionOptions.MinVideoLength}"
+                                     UpperValue="{Binding VideoConversionOptions.MaxVideoLength}"
+                                     AutoToolTipPlacement="TopLeft"
+                                     Tag="{Binding VideoConversionOptions}">
+
+                        <mah:RangeSlider.AutoToolTipLowerValueTemplate>
+                            <DataTemplate DataType="mah:RangeSliderAutoTooltipValues">
+                                <TextBlock >
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0}:{1:00}">
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
+                                                     Path="DataContext.VideoConversionOptions.MinVideoLengthTime.Minutes"
+                                                     FallbackValue="0" />
+
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
+                                                     Path="DataContext.VideoConversionOptions.MinVideoLengthTime.Seconds"
+                                                     FallbackValue="0" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </mah:RangeSlider.AutoToolTipLowerValueTemplate>
+
+                        <mah:RangeSlider.AutoToolTipUpperValueTemplate>
+                            <DataTemplate DataType="mah:RangeSliderAutoTooltipValues">
+                                <TextBlock >
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0}:{1:00}">
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
+                                                     Path="DataContext.VideoConversionOptions.MaxVideoLengthTime.Minutes"
+                                                     FallbackValue="0" />
+
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
+                                                     Path="DataContext.VideoConversionOptions.MaxVideoLengthTime.Seconds"
+                                                     FallbackValue="0" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DataTemplate>
+                        </mah:RangeSlider.AutoToolTipUpperValueTemplate>
+
+                        <mah:RangeSlider.AutoToolTipRangeValuesTemplate>
+                            <DataTemplate DataType="mah:RangeSliderAutoTooltipValues">
+                                <UniformGrid Columns="2" Rows="2">
+                                    <TextBlock HorizontalAlignment="Right" Text="From:" />
+                                    <TextBlock HorizontalAlignment="Right">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0}:{1}">
+                                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
+                                                         Path="DataContext.VideoConversionOptions.MinVideoLengthTime.Minutes" FallbackValue="00" />
+
+                                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
+                                                         Path="DataContext.VideoConversionOptions.MinVideoLengthTime.Seconds"
+                                                         FallbackValue="00" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+
+                                    <TextBlock HorizontalAlignment="Right" Text="To:" />
+                                    <TextBlock HorizontalAlignment="Right">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0}:{1}">
+                                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
+                                                         Path="DataContext.VideoConversionOptions.MaxVideoLengthTime.Minutes" FallbackValue="00" />
+
+                                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
+                                                         Path="DataContext.VideoConversionOptions.MaxVideoLengthTime.Seconds"
+                                                         FallbackValue="00" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </UniformGrid>
+                            </DataTemplate>
+                        </mah:RangeSlider.AutoToolTipRangeValuesTemplate>
+                    </mah:RangeSlider>
+
                     <mah:DropDownButton Margin="0 0 0 10" Content="Filters" ItemsSource="{Binding SupportedFilters}">
                         <mah:DropDownButton.ItemContainerStyle>
                             <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
-                                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type mah:DropDownButton}}, Path=DataContext.AddFilterCommand}" />
+                                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type mah:DropDownButton}}, Mode=OneWay, Path=DataContext.AddFilterCommand, UpdateSourceTrigger=PropertyChanged}" />
                                 <Setter Property="CommandParameter" Value="{Binding}" />
                             </Style>
                         </mah:DropDownButton.ItemContainerStyle>

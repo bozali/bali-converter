@@ -1,6 +1,7 @@
 ﻿namespace Bali.Converter.App
 {
     using Bali.Converter.App.Events;
+    using Bali.Converter.App.Modules.Conversion.Video.View;
     using Bali.Converter.App.Modules.MediaDownloader.Views;
     using Bali.Converter.App.ViewModels;
 
@@ -34,9 +35,9 @@
 
             this.regionManager = regionManager;
 
-            this.regionManager.RegisterViewWithRegion("ContentRegion", () => container.Resolve<MediaDownloaderView>());
+            this.regionManager.RegisterViewWithRegion<MediaDownloaderView>("ContentRegion");
         }
-        
+
         private void NavigationItemInvoked(object sender, HamburgerMenuItemInvokedEventArgs args)
         {
             var item = (HamburgerMenuItem)args.InvokedItem;

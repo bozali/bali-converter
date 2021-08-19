@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Controls;
@@ -62,7 +63,11 @@
 
             this.timer = new DispatcherTimer();
             this.timer.Interval = TimeSpan.FromSeconds(1.0);
-            this.timer.Tick += (s, e) => this.MediaPosition = this.MediaElement.Position.Seconds;
+            this.timer.Tick += (s, e) =>
+                               {
+                                   this.MediaPosition = this.MediaElement.Position.Seconds;
+                                   this.RaisePropertyChanged(nameof(this.Position));
+                               };
             this.timer.Start();
 
             this.ConvertCommand = new DelegateCommand(async () => await this.Convert());
@@ -72,6 +77,7 @@
             this.RemoveFilterCommand = new DelegateCommand<FilterBaseViewModel>(this.RemoveFilter);
 
             this.Filters = new ObservableCollection<FilterBaseViewModel>();
+            this.VideoConversionOptions = new VideoConversionOptionsViewModel();
         }
 
         public DelegateCommand ConvertCommand { get; }
@@ -111,6 +117,10 @@
                 else if (value is RotationFilterViewModel)
                 {
                     view = this.container.Resolve<RotationFilterView>();
+                }
+                else if (value is FpsFilterViewModel)
+                {
+                    view = this.container.Resolve<FpsFilterView>();
                 }
                 else
                 {
@@ -172,6 +182,11 @@
             set => this.SetProperty(ref this.mediaPosition, value);
         }
 
+        public TimeSpan Position
+        {
+            get => this.MediaElement?.Position ?? TimeSpan.Zero;
+        }
+
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             this.Filters.Clear();
@@ -184,6 +199,11 @@
             this.MediaElement.MediaOpened += (s, e) =>
                                              {
                                                  this.metadata.MaximumLength = System.Convert.ToInt32(this.MediaElement.NaturalDuration.TimeSpan.TotalSeconds);
+
+                                                 Debug.WriteLine(this.MediaElement.NaturalDuration.TimeSpan.TotalSeconds);
+
+                                                 this.VideoConversionOptions.MinVideoLength = 0.0;
+                                                 this.VideoConversionOptions.MaxVideoLength = this.MediaElement.NaturalDuration.TimeSpan.TotalSeconds;
                                              };
 
             this.SupportedFilters = new ObservableCollection<string>();
