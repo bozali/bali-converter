@@ -27,7 +27,7 @@
 
         public override async Task Convert(string source, string destination)
         {
-            await this.ffmpeg.Convert(source, destination, new VideoConversionOptions
+            await this.ffmpeg.Convert(source, destination, new ConversionOptions
             {
                 Filters = this.AudioConversionOptions.AudioFilters
             });

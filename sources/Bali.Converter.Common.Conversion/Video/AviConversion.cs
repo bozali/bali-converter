@@ -30,7 +30,7 @@
 
         public override async Task Convert(string source, string destination)
         {
-            await this.ffmpeg.Convert(source, destination, new Converter.FFmpeg.VideoConversionOptions
+            await this.ffmpeg.Convert(source, destination, new Converter.FFmpeg.ConversionOptions
             {
                 Filters = this.VideoConversionOptions.VideoFilters
             });

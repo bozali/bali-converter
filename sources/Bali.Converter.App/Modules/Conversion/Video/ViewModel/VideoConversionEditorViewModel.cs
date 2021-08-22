@@ -147,16 +147,6 @@
             set => this.SetProperty(ref this.metadata, value);
         }
 
-        public bool ContainsAudioOptions
-        {
-            get => this.conversion.Topology.HasFlag(ConversionTopology.Audio);
-        }
-
-        public bool ContainsVideoOptions
-        {
-            get => this.conversion.Topology.HasFlag(ConversionTopology.Video);
-        }
-
         public string SourcePath
         {
             get => this.sourcePath;
@@ -200,8 +190,6 @@
                                              {
                                                  this.metadata.MaximumLength = System.Convert.ToInt32(this.MediaElement.NaturalDuration.TimeSpan.TotalSeconds);
 
-                                                 Debug.WriteLine(this.MediaElement.NaturalDuration.TimeSpan.TotalSeconds);
-
                                                  this.VideoConversionOptions.MinVideoLength = 0.0;
                                                  this.VideoConversionOptions.MaxVideoLength = this.MediaElement.NaturalDuration.TimeSpan.TotalSeconds;
                                              };
@@ -231,11 +219,14 @@
 
         private async Task Convert()
         {
+            TimeSpan? to = this.VideoConversionOptions.HasMaxLengthTimeChanges(TimeSpan.FromSeconds(this.Metadata.MaximumLength)) ? this.VideoConversionOptions.MaxVideoLengthTime : null;
+            TimeSpan? from = this.VideoConversionOptions.HasMinLengthTimeChanges() ? this.VideoConversionOptions.MinVideoLengthTime : null;
+
             if (this.conversion.Topology.HasFlag(ConversionTopology.Video))
             {
                 ((IVideoConversion)this.conversion).VideoConversionOptions = new VideoConversionOptions
                 {
-                    VideoFilters = this.GetVideoFilters().ToArray()
+                    VideoFilters = this.GetVideoFilters().ToArray(),
                 };
             }
 
@@ -246,7 +237,6 @@
                     AudioFilters = this.GetAudioFilters().ToArray()
                 };
             }
-
 
             var fileDialog = new VistaSaveFileDialog();
             fileDialog.Filter = $"(*.{this.conversion.Extension.ToLowerInvariant()})|*.*";

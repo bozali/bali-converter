@@ -23,7 +23,7 @@
             this.ffmpegPath = ffmpegPath;
         }
 
-        public async Task Convert(string path, string destination, VideoConversionOptions options)
+        public async Task Convert(string path, string destination, ConversionOptions options)
         {
             var arguments = new List<string>();
             arguments.Add($@"-i ""{path}""");

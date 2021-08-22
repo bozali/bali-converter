@@ -1,14 +1,16 @@
 ﻿namespace Bali.Converter.FFmpeg
 {
+    using System;
+
     using Bali.Converter.FFmpeg.Filters;
 
-    public class VideoConversionOptions
+    public class ConversionOptions
     {
         public int Fps { get; set; }
 
-        //public int From { get; set; }
+        public TimeSpan? StartPosition { get; set; }
 
-        //public int To { get; set; }
+        public TimeSpan? EndPosition { get; set; }
 
         public IFilter[] Filters { get; set; }
     }

@@ -32,8 +32,8 @@
                               LoadedBehavior="Manual" Stretch="Fill" x:Name="Media"
                               Margin="0 0 0 10" />
 
-                <Slider Margin="0 0 0 10" Minimum="0" Maximum="{Binding Metadata.MaximumLength}" Value="{Binding MediaPosition}" />
-                <TextBlock HorizontalAlignment="Center">
+                <Slider Margin="0 0 0 5" Minimum="0" Maximum="{Binding Metadata.MaximumLength}" Value="{Binding MediaPosition}" />
+                <TextBlock Margin="0 0 0 10" HorizontalAlignment="Center">
                     <TextBlock>
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0}:{1:00}">
@@ -82,7 +82,7 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0">
-                    <mah:RangeSlider Margin="0 0 0 10"
+                    <mah:RangeSlider Margin="0 0 0 20"
                                      Minimum="0"
                                      Maximum="{Binding Metadata.MaximumLength}"
                                      LowerValue="{Binding VideoConversionOptions.MinVideoLength}"
@@ -132,13 +132,14 @@
                                     <TextBlock HorizontalAlignment="Right" Text="From:" />
                                     <TextBlock HorizontalAlignment="Right">
                                         <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0}:{1}">
+                                            <MultiBinding StringFormat="{}{0}:{1:00}">
                                                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
-                                                         Path="DataContext.VideoConversionOptions.MinVideoLengthTime.Minutes" FallbackValue="00" />
+                                                         Path="DataContext.VideoConversionOptions.MinVideoLengthTime.Minutes"
+                                                         FallbackValue="0" />
 
                                                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
                                                          Path="DataContext.VideoConversionOptions.MinVideoLengthTime.Seconds"
-                                                         FallbackValue="00" />
+                                                         FallbackValue="0" />
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>
@@ -146,13 +147,14 @@
                                     <TextBlock HorizontalAlignment="Right" Text="To:" />
                                     <TextBlock HorizontalAlignment="Right">
                                         <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0}:{1}">
+                                            <MultiBinding StringFormat="{}{0}:{1:00}">
                                                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
-                                                         Path="DataContext.VideoConversionOptions.MaxVideoLengthTime.Minutes" FallbackValue="00" />
+                                                         Path="DataContext.VideoConversionOptions.MaxVideoLengthTime.Minutes"
+                                                         FallbackValue="0" />
 
                                                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type mah:RangeSlider}}"
                                                          Path="DataContext.VideoConversionOptions.MaxVideoLengthTime.Seconds"
-                                                         FallbackValue="00" />
+                                                         FallbackValue="0" />
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>

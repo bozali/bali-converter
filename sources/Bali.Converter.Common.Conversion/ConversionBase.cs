@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+
     using Bali.Converter.Common.Enums;
 
     public abstract class ConversionBase<T> : IConversion where T : IConversion

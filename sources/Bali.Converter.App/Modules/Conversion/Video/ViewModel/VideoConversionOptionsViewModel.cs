@@ -1,6 +1,7 @@
 ﻿namespace Bali.Converter.App.Modules.Conversion.Video.ViewModel
 {
     using System;
+
     using Prism.Mvvm;
 
     // TODO For the Max- and MinVideoLengthTime properties we need a maybe a better solutions. We are creating always a new TimeSpan object if the time changes.
@@ -53,6 +54,16 @@
         {
             get => this.maxVideoLengthTime;
             set => this.SetProperty(ref this.maxVideoLengthTime, value);
+        }
+
+        public bool HasMinLengthTimeChanges()
+        {
+            return TimeSpan.Zero != this.MinVideoLengthTime;
+        }
+
+        public bool HasMaxLengthTimeChanges(TimeSpan max)
+        {
+            return this.MaxVideoLengthTime != max;
         }
     }
 }
