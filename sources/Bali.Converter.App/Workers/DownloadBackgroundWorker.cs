@@ -88,6 +88,8 @@
                     this.logger.Debug($"Download Path: {downloadPath}");
                     this.logger.Debug($"Destination Path: {destinationPath}");
 
+                    new FileInfo(destinationPath).SafeDelete();
+
                     var options = new DownloadOptions
                     {
                         DownloadBandwidth = App.IsMinimized ? this.configurationService.Configuration.BandwidthMinimized : this.configurationService.Configuration.Bandwidth,
