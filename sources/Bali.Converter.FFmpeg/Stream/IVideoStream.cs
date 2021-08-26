@@ -3,7 +3,5 @@
     public interface IVideoStream
     {
         int Fps { get; set; }
-
-        int 
     }
 }
