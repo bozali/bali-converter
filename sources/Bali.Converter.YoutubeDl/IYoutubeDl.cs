@@ -5,7 +5,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using Bali.Converter.YoutubeDl.Models;
+    using Bali.Converter.YoutubeDl.Serialization;
 
     public interface IYoutubeDl
     {

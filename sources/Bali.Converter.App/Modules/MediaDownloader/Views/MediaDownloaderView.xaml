@@ -7,6 +7,8 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:vm="clr-namespace:Bali.Converter.App.Modules.MediaDownloader.ViewModels"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:quality="clr-namespace:Bali.Converter.YoutubeDl.Quality;assembly=Bali.Converter.YoutubeDl"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:MediaDownloaderViewModel}"
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="450" d:DesignWidth="800"
@@ -37,6 +39,36 @@
                     <ComboBoxItem Content="Avi"  />
                 </ComboBox>
             </mah:MetroHeader>
+
+            <Expander Header="Quality" Margin="0 25 0 0" Padding="8" IsExpanded="True">
+                <StackPanel>
+                    <!-- Quality information box -->
+                    <Border Padding="8"
+                            Background="{DynamicResource MahApps.Brushes.SystemControlBackgroundChromeMedium}"
+                            BorderBrush="{DynamicResource MahApps.Brushes.Control.Border}" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal">
+                            <icon:PackIconMaterial Kind="InformationOutline" Margin="0 0 10 0" />
+                            <TextBlock Text="The quality that the downloader will automatically select. Can be specified later if you edit." />
+                        </StackPanel>
+                    </Border>
+
+                    <mah:MetroHeader Margin="0 10 0 0" Header="Video Quality">
+                        <ComboBox HorizontalAlignment="Left" Width="200" SelectedIndex="0" SelectedValuePath="Tag"
+                                  SelectedValue="{Binding VideoQualityOption}">
+                            <ComboBoxItem Content="Best" Tag="{x:Static quality:AutomaticQualityOption.Best}" />
+                            <ComboBoxItem Content="Worst" Tag="{x:Static quality:AutomaticQualityOption.Worst}" />
+                        </ComboBox>
+                    </mah:MetroHeader>
+
+                    <mah:MetroHeader Margin="0 10 0 0" Header="Audio Quality">
+                        <ComboBox HorizontalAlignment="Left" Width="200" SelectedIndex="0" SelectedValuePath="Tag"
+                                  SelectedValue="{Binding AudioQualityOption}">
+                            <ComboBoxItem Content="Best" Tag="{x:Static quality:AutomaticQualityOption.Best}" />
+                            <ComboBoxItem Content="Worst" Tag="{x:Static quality:AutomaticQualityOption.Worst}" />
+                        </ComboBox>
+                    </mah:MetroHeader>
+                </StackPanel>
+            </Expander>
 
             <CheckBox Margin="0 10 0 0" Visibility="{Binding IsPlaylist, Converter={StaticResource BooleanToVisibilityConverter}}" 
                       Content="The provided URL is a playlist. Do you want to proceed as playlist?"

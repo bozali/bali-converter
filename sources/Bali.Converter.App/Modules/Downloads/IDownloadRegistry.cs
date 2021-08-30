@@ -6,7 +6,7 @@
 
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
-    using Bali.Converter.YoutubeDl.Models;
+    using Bali.Converter.YoutubeDl.Serialization;
 
     public interface IDownloadRegistry
     {

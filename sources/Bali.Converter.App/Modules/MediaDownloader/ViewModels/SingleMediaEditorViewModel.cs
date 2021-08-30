@@ -8,6 +8,7 @@
     using Bali.Converter.App.Modules.MediaDownloader.Views;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
+    using Bali.Converter.YoutubeDl.Quality;
 
     using Prism.Commands;
     using Prism.Mvvm;
@@ -19,6 +20,7 @@
         private readonly IDownloadRegistry downloadRegistry;
         private readonly IMapper mapper;
 
+        private QualityOptionViewModel quality;
         private VideoViewModel video;
 
         public SingleMediaEditorViewModel(IRegionManager regionManager, IDownloadRegistry downloadRegistry, IMapper mapper)
@@ -32,6 +34,12 @@
 
         public DelegateCommand DownloadCommand { get; }
 
+        public QualityOptionViewModel Quality
+        {
+            get => this.quality;
+            set => this.SetProperty(ref this.quality, value);
+        }
+
         public VideoViewModel Video
         {
             get => this.video;
@@ -41,6 +49,12 @@
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             this.Video = navigationContext.Parameters.GetValue<VideoViewModel>("Video");
+
+            this.Quality = new QualityOptionViewModel
+            {
+                VideoQualityOption = navigationContext.Parameters.GetValue<AutomaticQualityOption>("VideoQuality"),
+                AudioQualityOption = navigationContext.Parameters.GetValue<AutomaticQualityOption>("AudioQuality")
+            };
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

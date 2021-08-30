@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bali.Converter.Common", "so
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bali.Converter.FFmpeg", "sources\Bali.Converter.FFmpeg\Bali.Converter.FFmpeg.csproj", "{CC744BDC-E8D1-4ED8-BF08-F220F8A6C7B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bali.Converter.Common.Conversion", "sources\Bali.Converter.Common.Conversion\Bali.Converter.Common.Conversion.csproj", "{E97DA079-2D0C-4155-922A-93C5359D7005}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bali.Converter.Common.Conversion", "sources\Bali.Converter.Common.Conversion\Bali.Converter.Common.Conversion.csproj", "{E97DA079-2D0C-4155-922A-93C5359D7005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -72,9 +72,12 @@
                         <mah:HamburgerMenuIconItem.Icon>
                             <!--
                             TODO We need some kind of badge in the download menu item.
-                            <mah:Badged Badge="3" BadgePlacementMode="TopLeft" BadgeBackground="Red">
-                            </mah:Badged>
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <mah:Badged Badge="5" BadgePlacementMode="TopRight" BadgeBackground="{DynamicResource MahApps.Brushes.Badged.Background}">
+                                </mah:Badged>                            
+                            </Grid>
                             -->
+
                             <Path Margin="0 0 5 0" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="White" Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
                         </mah:HamburgerMenuIconItem.Icon>
                     </mah:HamburgerMenuIconItem>

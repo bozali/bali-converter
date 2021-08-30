@@ -16,7 +16,8 @@
     using Bali.Converter.Common.Extensions;
     using Bali.Converter.Common.Media;
     using Bali.Converter.YoutubeDl;
-    using Bali.Converter.YoutubeDl.Models;
+    using Bali.Converter.YoutubeDl.Quality;
+    using Bali.Converter.YoutubeDl.Serialization;
 
     using ImageMagick;
 
@@ -37,6 +38,9 @@
         private readonly IDialogCoordinator dialog;
         private readonly IYoutubeDl youtubedl;
 
+        private AutomaticQualityOption audioQualityOption;
+        private AutomaticQualityOption videoQualityOption;
+
         private string url;
         private string format;
         private bool proceedAsPlaylist;
@@ -55,6 +59,18 @@
             this.EditCommand = new DelegateCommand(async () => await this.Edit(), () => !string.IsNullOrEmpty(this.Url));
 
             this.Format = FileExtension.MP4.ToString();
+        }
+
+        public AutomaticQualityOption AudioQualityOption
+        {
+            get => this.audioQualityOption;
+            set => this.SetProperty(ref this.audioQualityOption, value);
+        }
+
+        public AutomaticQualityOption VideoQualityOption
+        {
+            get => this.videoQualityOption;
+            set => this.SetProperty(ref this.videoQualityOption, value);
         }
 
         public string Url
@@ -183,6 +199,8 @@
 
                     var parameters = new NavigationParameters();
                     parameters.Add("Video", video);
+                    parameters.Add("VideoQuality", this.VideoQualityOption);
+                    parameters.Add("AudioQuality", this.AudioQualityOption);
 
                     this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(SingleMediaEditorView), parameters);
                 }

@@ -13,7 +13,7 @@
     using Bali.Converter.Common;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
-    using Bali.Converter.YoutubeDl.Models;
+    using Bali.Converter.YoutubeDl.Serialization;
     using log4net;
 
     public class DownloadRegistry : IDownloadRegistry

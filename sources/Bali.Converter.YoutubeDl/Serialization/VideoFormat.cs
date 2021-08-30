@@ -1,4 +1,4 @@
-﻿namespace Bali.Converter.YoutubeDl.Models
+﻿namespace Bali.Converter.YoutubeDl.Serialization
 {
     using System;
 

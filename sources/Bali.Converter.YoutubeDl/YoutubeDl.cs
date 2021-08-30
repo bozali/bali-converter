@@ -14,7 +14,8 @@
     using Bali.Converter.Common;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Extensions;
-    using Bali.Converter.YoutubeDl.Models;
+    using Bali.Converter.YoutubeDl.Quality;
+    using Bali.Converter.YoutubeDl.Serialization;
 
     using log4net;
 

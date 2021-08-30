@@ -7,6 +7,7 @@
     using Bali.Converter.Common.Media;
     using Bali.Converter.FFmpeg.Filters.Audio;
     using Bali.Converter.FFmpeg.Filters.Video;
+    using Bali.Converter.YoutubeDl.Serialization;
 
     public class AutoMapperProfile : Profile
     {
@@ -14,9 +15,13 @@
         {
             this.CreateMap<MediaTags, MediaTagsViewModel>().ReverseMap();
 
+            // FFmpeg
             this.CreateMap<RotationFilter, RotationFilterViewModel>().ReverseMap();
             this.CreateMap<VolumeFilter, VolumeFilterViewModel>().ReverseMap();
             this.CreateMap<FpsFilter, FpsFilterViewModel>().ReverseMap();
+
+            // Youtube-DL
+            this.CreateMap<VideoFormat, VideoFormatViewModel>().ReverseMap();
         }
     }
 }
