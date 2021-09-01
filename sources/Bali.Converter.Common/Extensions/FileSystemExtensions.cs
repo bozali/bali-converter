@@ -34,6 +34,22 @@
             return true;
         }
 
+        public static void SafeCreate(this FileInfo file)
+        {
+            if (!file.Exists)
+            {
+                file.Create();
+            }
+        }
+
+        public static void CreateDirectory(this FileInfo file)
+        {
+            if (file.Directory is {Exists: false})
+            {
+                file.Directory.Create();
+            }
+        }
+
         public static void SafeDelete(this FileSystemInfo fs)
         {
             if (fs.Exists)

@@ -4,11 +4,11 @@
 
     public class DownloadEventArgs : EventArgs
     {
-        public DownloadEventArgs(DownloadJob job)
+        public DownloadEventArgs(DownloadJobQueueItem job)
         {
             this.Job = job;
         }
 
-        public DownloadJob Job { get; set; }
+        public DownloadJobQueueItem Job { get; set; }
     }
 }

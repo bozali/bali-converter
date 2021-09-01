@@ -10,7 +10,7 @@
 
     public class DownloadJobViewModel : BindableBase
     {
-        private readonly DownloadJob job;
+        private readonly DownloadJobQueueItem job;
 
         //private MediaTagsViewModel tags;
 
@@ -20,29 +20,24 @@
         private float progress;
         private bool isSelected;
 
-        public DownloadJobViewModel(DownloadJob job)
+        public DownloadJobViewModel(IDownloadRegistry downloadRegistry, DownloadJobQueueItem job)
         {
             this.job = job;
-            this.job.DownloadProgressChanged += this.OnDownloadProgressChanged;
+            this.job.Details.DownloadProgressChanged += this.OnDownloadProgressChanged;
 
-            this.HeaderText = this.job.Tags.Title;
-            this.ProgressText = "Pending";
-            this.Url = this.job.Url;
+            this.ProgressText = this.job.State.ToString("G");
+            this.HeaderText = this.job.Details.Tags.Title;
+            this.Progress = job.Details.Progress;
+            this.Url = this.job.Details.Url;
             this.Id = this.job.Id;
-            this.Progress = 0.0f;
 
-            //this.Tags = new MediaTagsViewModel
-            //{
-            //    Album = job.Tags.Album,
-            //    Artist = job.Tags.Artist,
-            //    Year = job.Tags.Year,
-            //    Copyright = 
-            //};
-
-            this.RequestCancelCommand = new DelegateCommand(() => this.job.State = DownloadState.Canceled);
+            this.RequestCancelCommand = new DelegateCommand(() => downloadRegistry.Cancel(this.job.Id));
+            // this.ResumeCommand = new DelegateCommand(() => this.job.State = DownloadState.Pending);
         }
 
         public DelegateCommand RequestCancelCommand { get; }
+
+        public DelegateCommand ResumeCommand { get; }
 
         public Guid Id { get; set; }
 
@@ -78,7 +73,7 @@
 
         public MediaTags Tags
         {
-            get => this.job.Tags;
+            get => this.job.Details.Tags;
         }
 
         private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

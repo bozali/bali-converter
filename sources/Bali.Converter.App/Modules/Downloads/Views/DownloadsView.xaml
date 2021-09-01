@@ -18,11 +18,19 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
             <TextBlock Text="There are currently no downloads queued."
                        FontSize="14" TextWrapping="Wrap"
                        Visibility="{Binding IsDownloadsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-            <ItemsControl ItemsSource="{Binding DownloadJobs}">
+            <Button Grid.Row="0" HorizontalAlignment="Left" Content="Clear" Width="150" Margin="0 0 0 10"
+                    Command="{Binding ClearDownloadListCommand}" />
+
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding DownloadJobs}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel />

@@ -6,14 +6,14 @@
 
     // TODO Maybe we don't need this class. We can just use List<DownloadJob> to serialize the data
     [Serializable]
-    [XmlRoot("List")]
-    public class DownloadList
+    [XmlRoot("Queue")]
+    public class DownloadQueue
     {
-        public DownloadList()
+        public DownloadQueue()
         {
-            this.Jobs = new List<DownloadJob>();
+            this.Jobs = new List<DownloadJobQueueItem>();
         }
 
-        public List<DownloadJob> Jobs { get; set; }
+        public List<DownloadJobQueueItem> Jobs { get; set; }
     }
 }

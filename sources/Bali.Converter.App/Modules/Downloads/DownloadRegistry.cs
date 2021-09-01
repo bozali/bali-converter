@@ -9,133 +9,139 @@
     using System.Threading.Tasks;
     using System.Xml.Serialization;
 
+    using Bali.Converter.App.Serialization;
     using Bali.Converter.App.Services;
     using Bali.Converter.Common;
-    using Bali.Converter.Common.Enums;
-    using Bali.Converter.Common.Media;
-    using Bali.Converter.YoutubeDl.Serialization;
+    using Bali.Converter.Common.Extensions;
+
     using log4net;
 
     public class DownloadRegistry : IDownloadRegistry
     {
-        private ILog logger = LogManager.GetLogger(Constants.DownloadServiceLogger);
+        private readonly ILog logger;
 
-        private ConcurrentDictionary<Guid, DownloadJob> registry;
+        private ConcurrentDictionary<Guid, DownloadJobQueueItem> registry;
         private SemaphoreSlim semaphore;
 
         public DownloadRegistry()
         {
+            this.logger = LogManager.GetLogger(Constants.DownloadServiceLogger);
+
             this.Initialize();
         }
 
         public event EventHandler<DownloadEventArgs> DownloadJobAdded;
         public event EventHandler<DownloadEventArgs> DownloadJobRemoved;
 
-        public IEnumerable<DownloadJob> Jobs
+        public IEnumerable<DownloadJobQueueItem> Jobs
         {
             get => this.registry.Values;
         }
 
-        public async Task<DownloadJob> Get()
+        private string QueuePath
+        {
+            get => Path.Combine(IConfigurationService.ApplicationDataPath, "Queue.xml");
+        }
+
+        public async Task<DownloadJobQueueItem> Get()
         {
             await this.semaphore.WaitAsync();
 
-            var found = this.registry.First();
+            var found = this.registry
+                            .Where(j => j.Value.State == DownloadState.Downloading || j.Value.State == DownloadState.Pending)
+                            .OrderBy(j => j.Value.Index)
+                            .FirstOrDefault();
+
             return found.Value;
         }
-        
-        public void Add(string url, FileExtension format, MediaTags tags)
+
+        public void Complete(DownloadJob job)
         {
-            var job = new DownloadJob
+            if (this.registry.TryGetValue(job.Id, out var item))
             {
-                Url = url,
-                TargetFormat = format,
-                Tags = tags
-            };
+                item.State = DownloadState.Completed;
 
-            if (this.registry.TryAdd(job.Id, job))
-            {
-                using var writer = new StreamWriter(Path.Combine(IConfigurationService.ApplicationDataPath, "List.xml"));
-
-                var serializer = new XmlSerializer(typeof(DownloadList));
-                serializer.Serialize(writer, new DownloadList
-                {
-                    Jobs = this.registry.Select(p => p.Value).ToList()
-                });
-
-                this.semaphore.Release();
-
-                this.OnDownloadJobAdded(new DownloadEventArgs(job));
+                this.UpdateDownloadQueue();
             }
         }
 
         public void Add(DownloadJob job)
         {
-            if (!this.registry.TryAdd(job.Id, job))
+            this.logger.Info($"Registering {job.Id:B}");
+
+            // Create a new job details
+            var file = new FileInfo(Path.Combine(IConfigurationService.ApplicationDataPath, "Details", job.Id.ToString("B") + ".xml"));
+
+            if (file.Directory is { Exists: false })
+            {
+                file.Directory.Create();
+            }
+
+            var item = new DownloadJobQueueItem
+            {
+                DetailsPath = file.FullName,
+                Index = this.registry.Count,
+                Id = job.Id,
+                Details = job
+            };
+
+            if (!this.registry.TryAdd(item.Id, item))
             {
                 return;
             }
 
-            using var writer = new StreamWriter(Path.Combine(IConfigurationService.ApplicationDataPath, "List.xml"));
+            // Creating a new details file of the job.
+            ImmediateXmlSerializer.Serialize(file.FullName, job);
 
-            var serializer = new XmlSerializer(typeof(DownloadList));
-            serializer.Serialize(writer, new DownloadList
-            {
-                Jobs = this.registry.Select(p => p.Value).ToList()
-            });
-
-            this.semaphore.Release();
-
-            this.OnDownloadJobAdded(new DownloadEventArgs(job));
+            this.OnDownloadJobAdded(new DownloadEventArgs(item));
         }
 
         public void Remove(Guid id)
         {
+            // TODO Also remove the details file
             if (this.registry.TryRemove(id, out var job))
             {
-                using var writer = new StreamWriter(Path.Combine(IConfigurationService.ApplicationDataPath, "List.xml"));
-
-                var serializer = new XmlSerializer(typeof(DownloadList));
-                serializer.Serialize(writer, new DownloadList
-                {
-                    Jobs = this.registry.Select(p => p.Value).ToList()
-                });
-
                 this.OnDownloadJobRemoved(new DownloadEventArgs(job));
+            }
+        }
+
+        public void Cancel(Guid id)
+        {
+            if (this.registry.TryGetValue(id, out var item))
+            {
+                // Changing the reference of the item to canceled and saving it.
+                item.State = DownloadState.Canceled;
+
+                this.UpdateDownloadQueue();
             }
         }
 
         private void Initialize()
         {
-            var file = new FileInfo(Path.Combine(IConfigurationService.ApplicationDataPath, "List.xml"));
-            var serializer = new XmlSerializer(typeof(DownloadList));
+            var file = new FileInfo(Path.Combine(IConfigurationService.ApplicationDataPath, "Queue.xml"));
 
             try
             {
-                DownloadList list = null;
+                var queue = new DownloadQueue();
 
                 if (!file.Exists)
                 {
-                    if (file.Directory is { Exists: false })
-                    {
-                        file.Directory.Create();
-                    }
-
-                    using var writer = file.Open(FileMode.Create, FileAccess.ReadWrite);
-
-                    list = new DownloadList();
-                    serializer.Serialize(writer, list);
+                    file.CreateDirectory();
+                    ImmediateXmlSerializer.Serialize(file.FullName, queue);
                 }
                 else
                 {
-                    using var reader = file.OpenRead();
-                    list = (DownloadList)serializer.Deserialize(reader);
+                    queue = ImmediateXmlSerializer.Deserialize<DownloadQueue>(file.FullName);
                 }
 
-                this.registry = new ConcurrentDictionary<Guid, DownloadJob>();
-                
+                this.registry = new ConcurrentDictionary<Guid, DownloadJobQueueItem>();
+
                 // ReSharper disable once PossibleNullReferenceException
-                list.Jobs.ForEach(d => this.registry.TryAdd(d.Id, d));
+                foreach (var item in queue.Jobs)
+                {
+                    item.Details = ImmediateXmlSerializer.Deserialize<DownloadJob>(item.DetailsPath);
+                    this.registry.TryAdd(item.Id, item);
+                }
 
                 this.semaphore = new SemaphoreSlim(this.registry.Count);
             }
@@ -145,9 +151,21 @@
             }
         }
 
+        private void UpdateDownloadQueue()
+        {
+            ImmediateXmlSerializer.Serialize(this.QueuePath, new DownloadQueue
+            {
+                Jobs = this.registry.Select(p => p.Value).ToList()
+            });
+        }
+
         protected virtual void OnDownloadJobAdded(DownloadEventArgs e)
         {
-            this.logger.Info($"Download job added: {e.Job.Id} - {e.Job.Url}");
+            this.logger.Info($"Download job added: {e.Job.Id}");
+
+            this.UpdateDownloadQueue();
+
+            this.semaphore.Release();
 
             var handler = this.DownloadJobAdded;
             handler?.Invoke(this, e);
@@ -155,7 +173,9 @@
 
         protected virtual void OnDownloadJobRemoved(DownloadEventArgs e)
         {
-            this.logger.Info($"Download job removed: {e.Job.Id} - {e.Job.Url}");
+            this.logger.Info($"Download job removed: {e.Job.Id}");
+
+            this.UpdateDownloadQueue();
 
             var handler = this.DownloadJobRemoved;
             handler?.Invoke(this, e);

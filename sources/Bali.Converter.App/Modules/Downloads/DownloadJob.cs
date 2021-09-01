@@ -7,6 +7,7 @@
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
 
+    [Serializable]
     public class DownloadJob
     {
         private float progress;
@@ -33,17 +34,18 @@
         [XmlAttribute]
         public string ThumbnailPath { get; set; }
 
-        public DownloadState State
-        {
-            get => this.state;
-            set
-            {
-                this.state = value;
-                this.ProgressText = this.state.ToString("G");
-
-                this.OnStateChanged(this.state);
-            }
-        }
+        // [XmlAttribute]
+        // public DownloadState State
+        // {
+        //     get => this.state;
+        //     set
+        //     {
+        //         this.state = value;
+        //         this.ProgressText = this.state.ToString("G");
+        // 
+        //         this.OnStateChanged(this.state);
+        //     }
+        // }
 
         [XmlElement]
         public MediaTags Tags { get; set; }

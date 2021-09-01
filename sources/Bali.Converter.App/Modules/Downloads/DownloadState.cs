@@ -8,6 +8,8 @@
 
         Canceled,
 
-        Pending
+        Pending,
+
+        Completed
     }
 }

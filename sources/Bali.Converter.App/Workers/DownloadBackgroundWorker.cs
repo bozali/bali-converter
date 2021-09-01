@@ -5,7 +5,7 @@
     using System.Net.Mime;
     using System.Threading;
     using System.Threading.Tasks;
-
+    using System.Xml.Serialization;
     using Bali.Converter.App.Events;
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Services;
@@ -41,11 +41,26 @@
         {
             while (!ct.IsCancellationRequested)
             {
-                DownloadJob job = null;
+                DownloadJobQueueItem item = null;
 
                 try
                 {
-                    job = await this.downloadRegistry.Get();
+                    item = await this.downloadRegistry.Get();
+
+                    // Skipping empty item. If we have releases but not enough jobs that are not cancelled.
+                    if (item == null)
+                    {
+                        continue;
+                    }
+
+                    var job = item.Details;
+
+                    // If the download is not pending we just skip them, because we did not remove
+                    // them from our list.
+                    if (item.State != DownloadState.Pending && item.State != DownloadState.Downloading)
+                    {
+                        continue;
+                    }
 
                     // Create a token to cancel if it was requested while downloading the resource.
                     using var cts = new CancellationTokenSource();
@@ -61,7 +76,7 @@
                         }
                     }
 
-                    job.DownloadStateEventChanged += OnDownloadStateChanged;
+                    item.DownloadStateChanged += OnDownloadStateChanged;
 
                     this.logger.Info($"Processing {job.Id} target format {job.TargetFormat}");
 
@@ -73,7 +88,7 @@
                     // the part files if cancellation is requested.
                     await using var ctr = cts.Token.Register(() =>
                                                              {
-                                                                 this.downloadRegistry.Remove(job.Id);
+                                                                 job.ProgressText = item.State.ToString("G");
 
                                                                  var file = new FileInfo(downloadPath + ".part");
 
@@ -111,9 +126,12 @@
 
                     File.Move(downloadPath, destinationPath);
 
-                    this.downloadRegistry.Remove(job.Id);
+                    this.downloadRegistry.Complete(job);
 
                     job.DownloadStateEventChanged -= OnDownloadStateChanged;
+                }
+                catch (OperationCanceledException)
+                {
                 }
                 catch (Exception e)
                 {
@@ -121,10 +139,11 @@
                 }
                 finally
                 {
-                    if (job != null)
-                    {
-                        new FileInfo(job.ThumbnailPath).SafeDelete();
-                    }
+                    //TODO
+                    //if (job != null)
+                    //{
+                    //    new FileInfo(job.ThumbnailPath).SafeDelete();
+                    //}
                 }
             }
         }

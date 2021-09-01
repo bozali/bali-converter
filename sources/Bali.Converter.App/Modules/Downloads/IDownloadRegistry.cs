@@ -4,23 +4,21 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using Bali.Converter.Common.Enums;
-    using Bali.Converter.Common.Media;
-    using Bali.Converter.YoutubeDl.Serialization;
-
     public interface IDownloadRegistry
     {
         event EventHandler<DownloadEventArgs> DownloadJobAdded;
         event EventHandler<DownloadEventArgs> DownloadJobRemoved;
 
-        IEnumerable<DownloadJob> Jobs { get; }
+        IEnumerable<DownloadJobQueueItem> Jobs { get; }
 
-        Task<DownloadJob> Get();
+        Task<DownloadJobQueueItem> Get();
+
+        void Complete(DownloadJob job);
         
-        void Add(string url, FileExtension format, MediaTags tags);
-
         void Add(DownloadJob job);
 
         void Remove(Guid id);
+
+        void Cancel(Guid id);
     }
 }

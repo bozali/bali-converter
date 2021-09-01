@@ -3,6 +3,7 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.Linq;
+    using System.Threading;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Extensions;
     using Bali.Converter.Common.Media;
@@ -22,19 +23,24 @@
             this.DownloadJobs = new ObservableCollection<DownloadJobViewModel>();
             this.DownloadJobs.CollectionChanged += this.OnCollectionChanged;
 
-            this.downloadRegistry.Jobs.ForEach(j => this.DownloadJobs.Add(new DownloadJobViewModel(j)));
-            
+            this.downloadRegistry.Jobs.ForEach(j => this.DownloadJobs.Add(new DownloadJobViewModel(this.downloadRegistry, j)));
+
             this.downloadRegistry.DownloadJobAdded += this.OnDownloadJobAdded;
             this.downloadRegistry.DownloadJobRemoved += this.OnDownloadJobRemoved;
+            // this.downloadRegistry.DownloadUpdated += this.OnDownloadUpdated;
 
             this.SelectItemCommand = new DelegateCommand<DownloadJobViewModel>(job =>
                                                                                {
                                                                                    job.IsSelected = !job.IsSelected;
                                                                                    this.DownloadJobs.Except(new[] { job }).ForEach(c => c.IsSelected = false);
                                                                                });
+
+            this.ClearDownloadListCommand = new DelegateCommand(this.ClearDownloadList);
         }
 
         public DelegateCommand<DownloadJobViewModel> SelectItemCommand { get; }
+
+        public DelegateCommand ClearDownloadListCommand { get; }
 
         public ObservableCollection<DownloadJobViewModel> DownloadJobs
         {
@@ -49,7 +55,7 @@
 
         private void OnDownloadJobAdded(object sender, DownloadEventArgs e)
         {
-            this.DownloadJobs.Add(new DownloadJobViewModel(e.Job));
+            this.DownloadJobs.Add(new DownloadJobViewModel(this.downloadRegistry, e.Job));
         }
 
         private void OnDownloadJobRemoved(object sender, DownloadEventArgs e)
@@ -62,6 +68,14 @@
         {
             this.RaisePropertyChanged(nameof(this.DownloadJobs));
             this.RaisePropertyChanged(nameof(this.IsDownloadsEmpty));
+        }
+
+        private void ClearDownloadList()
+        {
+            foreach (var job in this.DownloadJobs)
+            {
+                this.downloadRegistry.Remove(job.Id);
+            }
         }
     }
 }
