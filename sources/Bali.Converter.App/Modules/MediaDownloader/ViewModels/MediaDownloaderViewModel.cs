@@ -34,7 +34,7 @@
         private readonly ILog logger = LogManager.GetLogger(Constants.ApplicationLogger);
 
         private readonly IRegionManager regionManager;
-        private readonly IDownloadRegistry downloadRegistry;
+        private readonly IDownloadRegistryService downloadRegistry;
         private readonly IDialogCoordinator dialog;
         private readonly IYoutubeDl youtubedl;
 
@@ -46,7 +46,7 @@
         private bool proceedAsPlaylist;
 
         public MediaDownloaderViewModel(IRegionManager regionManager,
-                                        IDownloadRegistry downloadRegistry,
+                                        IDownloadRegistryService downloadRegistry,
                                         IDialogCoordinator dialog,
                                         IYoutubeDl youtubedl)
         {

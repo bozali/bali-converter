@@ -1,56 +1,43 @@
 ﻿namespace Bali.Converter.App.Modules.Downloads
 {
-    using System;
-    using System.Xml.Serialization;
-
     using Bali.Converter.App.Events;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
 
-    [Serializable]
+    using LiteDB;
+
     public class DownloadJob
     {
         private float progress;
         private string progressText;
         private DownloadState state;
 
-        public DownloadJob()
-        {
-            this.Id = Guid.NewGuid();
-        }
-
-        public event DownloadStateChangedEventHandler DownloadStateEventChanged;
+        public event DownloadStateChangedEventHandler DownloadStateChanged;
         public event DownloadProgressChangedEventHandler DownloadProgressChanged;
 
-        [XmlAttribute]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
-        [XmlAttribute]
         public string Url { get; set; }
 
-        [XmlAttribute]
         public FileExtension TargetFormat { get; set; }
 
-        [XmlAttribute]
         public string ThumbnailPath { get; set; }
 
-        // [XmlAttribute]
-        // public DownloadState State
-        // {
-        //     get => this.state;
-        //     set
-        //     {
-        //         this.state = value;
-        //         this.ProgressText = this.state.ToString("G");
-        // 
-        //         this.OnStateChanged(this.state);
-        //     }
-        // }
+        public DownloadState State
+        {
+            get => this.state;
+            set
+            {
+                this.state = value;
+                this.ProgressText = this.state.ToString("G");
+        
+                this.OnStateChanged(this.state);
+            }
+        }
 
-        [XmlElement]
         public MediaTags Tags { get; set; }
 
-        [XmlIgnore]
+        [BsonIgnore]
         public string ProgressText
         {
             get => this.progressText;
@@ -61,7 +48,7 @@
             }
         }
 
-        [XmlIgnore]
+        [BsonIgnore]
         public float Progress
         {
             get => this.progress;
@@ -79,7 +66,7 @@
 
         protected virtual void OnStateChanged(DownloadState state)
         {
-            this.DownloadStateEventChanged?.Invoke(this, new DownloadStateChangedEventArgs(state));
+            this.DownloadStateChanged?.Invoke(this, new DownloadStateChangedEventArgs(state));
         }
     }
 }

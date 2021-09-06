@@ -25,11 +25,11 @@
     {
         private readonly ILog logger = LogManager.GetLogger(Constants.DownloadServiceLogger);
         private readonly IConfigurationService configurationService;
-        private readonly IDownloadRegistry downloadRegistry;
+        private readonly IDownloadRegistryService downloadRegistry;
         private readonly IYoutubeDl youtubedl;
 
         public DownloadBackgroundWorker(IConfigurationService configurationService,
-                                        IDownloadRegistry downloadRegistry,
+                                        IDownloadRegistryService downloadRegistry,
                                         IYoutubeDl youtubedl)
         {
             this.configurationService = configurationService;
@@ -41,23 +41,21 @@
         {
             while (!ct.IsCancellationRequested)
             {
-                DownloadJobQueueItem item = null;
+                DownloadJob job = null;
 
                 try
                 {
-                    item = await this.downloadRegistry.Get();
+                    job = await this.downloadRegistry.Get();
 
                     // Skipping empty item. If we have releases but not enough jobs that are not cancelled.
-                    if (item == null)
+                    if (job == null)
                     {
                         continue;
                     }
 
-                    var job = item.Details;
-
                     // If the download is not pending we just skip them, because we did not remove
                     // them from our list.
-                    if (item.State != DownloadState.Pending && item.State != DownloadState.Downloading)
+                    if (job.State != DownloadState.Pending && job.State != DownloadState.Downloading)
                     {
                         continue;
                     }
@@ -76,7 +74,7 @@
                         }
                     }
 
-                    item.DownloadStateChanged += OnDownloadStateChanged;
+                    job.DownloadStateChanged += OnDownloadStateChanged;
 
                     this.logger.Info($"Processing {job.Id} target format {job.TargetFormat}");
 
@@ -88,7 +86,7 @@
                     // the part files if cancellation is requested.
                     await using var ctr = cts.Token.Register(() =>
                                                              {
-                                                                 job.ProgressText = item.State.ToString("G");
+                                                                 job.ProgressText = job.State.ToString("G");
 
                                                                  var file = new FileInfo(downloadPath + ".part");
 
@@ -126,9 +124,9 @@
 
                     File.Move(downloadPath, destinationPath);
 
-                    this.downloadRegistry.Complete(job);
+                    // TODO this.downloadRegistry.Complete(job);
 
-                    job.DownloadStateEventChanged -= OnDownloadStateChanged;
+                    job.DownloadStateChanged -= OnDownloadStateChanged;
                 }
                 catch (OperationCanceledException)
                 {

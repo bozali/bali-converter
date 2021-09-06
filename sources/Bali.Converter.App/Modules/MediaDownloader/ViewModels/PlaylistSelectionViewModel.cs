@@ -9,6 +9,7 @@
 
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Modules.MediaDownloader.Views;
+    using Bali.Converter.App.Services;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Extensions;
     using Bali.Converter.Common.Media;
@@ -20,13 +21,13 @@
     public class PlaylistSelectionViewModel : BindableBase, INavigationAware
     {
         private readonly IRegionManager regionManager;
-        private readonly IDownloadRegistry downloadRegistry;
+        private readonly IDownloadRegistryService downloadRegistry;
         private readonly IMapper mapper;
 
         private ObservableCollection<VideoViewModel> videos;
         private string searchText;
 
-        public PlaylistSelectionViewModel(IRegionManager regionManager, IDownloadRegistry downloadRegistry, IMapper mapper)
+        public PlaylistSelectionViewModel(IRegionManager regionManager, IDownloadRegistryService downloadRegistry, IMapper mapper)
         {
             this.regionManager = regionManager;
             this.downloadRegistry = downloadRegistry;

@@ -6,6 +6,7 @@
 
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Modules.MediaDownloader.Views;
+    using Bali.Converter.App.Services;
     using Bali.Converter.Common.Enums;
     using Bali.Converter.Common.Media;
     using Bali.Converter.YoutubeDl.Quality;
@@ -17,13 +18,13 @@
     public class SingleMediaEditorViewModel : BindableBase, INavigationAware
     {
         private readonly IRegionManager regionManager;
-        private readonly IDownloadRegistry downloadRegistry;
+        private readonly IDownloadRegistryService downloadRegistry;
         private readonly IMapper mapper;
 
         private QualityOptionViewModel quality;
         private VideoViewModel video;
 
-        public SingleMediaEditorViewModel(IRegionManager regionManager, IDownloadRegistry downloadRegistry, IMapper mapper)
+        public SingleMediaEditorViewModel(IRegionManager regionManager, IDownloadRegistryService downloadRegistry, IMapper mapper)
         {
             this.regionManager = regionManager;
             this.downloadRegistry = downloadRegistry;

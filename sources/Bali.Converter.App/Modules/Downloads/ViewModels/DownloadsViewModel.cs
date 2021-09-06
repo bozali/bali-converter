@@ -3,27 +3,27 @@
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.Linq;
-    using System.Threading;
-    using Bali.Converter.Common.Enums;
+
+    using Bali.Converter.App.Services;
     using Bali.Converter.Common.Extensions;
-    using Bali.Converter.Common.Media;
+
     using Prism.Commands;
     using Prism.Mvvm;
 
     public class DownloadsViewModel : BindableBase
     {
-        private readonly IDownloadRegistry downloadRegistry;
+        private readonly IDownloadRegistryService downloadRegistry;
 
         private ObservableCollection<DownloadJobViewModel> downloadJobs;
 
-        public DownloadsViewModel(IDownloadRegistry downloadRegistry)
+        public DownloadsViewModel(IDownloadRegistryService downloadRegistry)
         {
             this.downloadRegistry = downloadRegistry;
 
             this.DownloadJobs = new ObservableCollection<DownloadJobViewModel>();
             this.DownloadJobs.CollectionChanged += this.OnCollectionChanged;
 
-            this.downloadRegistry.Jobs.ForEach(j => this.DownloadJobs.Add(new DownloadJobViewModel(this.downloadRegistry, j)));
+            this.downloadRegistry.All.ForEach(j => this.DownloadJobs.Add(new DownloadJobViewModel(j)));
 
             this.downloadRegistry.DownloadJobAdded += this.OnDownloadJobAdded;
             this.downloadRegistry.DownloadJobRemoved += this.OnDownloadJobRemoved;
@@ -55,7 +55,7 @@
 
         private void OnDownloadJobAdded(object sender, DownloadEventArgs e)
         {
-            this.DownloadJobs.Add(new DownloadJobViewModel(this.downloadRegistry, e.Job));
+            this.DownloadJobs.Add(new DownloadJobViewModel(e.Job));
         }
 
         private void OnDownloadJobRemoved(object sender, DownloadEventArgs e)

@@ -1,7 +1,5 @@
 ﻿namespace Bali.Converter.App.Modules.Downloads.ViewModels
 {
-    using System;
-
     using Bali.Converter.App.Events;
     using Bali.Converter.Common.Media;
 
@@ -10,7 +8,7 @@
 
     public class DownloadJobViewModel : BindableBase
     {
-        private readonly DownloadJobQueueItem job;
+        private readonly DownloadJob job;
 
         //private MediaTagsViewModel tags;
 
@@ -20,18 +18,18 @@
         private float progress;
         private bool isSelected;
 
-        public DownloadJobViewModel(IDownloadRegistry downloadRegistry, DownloadJobQueueItem job)
+        public DownloadJobViewModel(DownloadJob job)
         {
             this.job = job;
-            this.job.Details.DownloadProgressChanged += this.OnDownloadProgressChanged;
+            this.job.DownloadProgressChanged += this.OnDownloadProgressChanged;
 
             this.ProgressText = this.job.State.ToString("G");
-            this.HeaderText = this.job.Details.Tags.Title;
-            this.Progress = job.Details.Progress;
-            this.Url = this.job.Details.Url;
+            this.HeaderText = this.job.Tags.Title;
+            this.Progress = job.Progress;
+            this.Url = this.job.Url;
             this.Id = this.job.Id;
 
-            this.RequestCancelCommand = new DelegateCommand(() => downloadRegistry.Cancel(this.job.Id));
+            // this.RequestCancelCommand = new DelegateCommand(() => downloadRegistry.Cancel(this.job.Id));
             // this.ResumeCommand = new DelegateCommand(() => this.job.State = DownloadState.Pending);
         }
 
@@ -39,7 +37,7 @@
 
         public DelegateCommand ResumeCommand { get; }
 
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public bool IsSelected
         {
@@ -73,7 +71,7 @@
 
         public MediaTags Tags
         {
-            get => this.job.Details.Tags;
+            get => this.job.Tags;
         }
 
         private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

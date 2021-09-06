@@ -5,8 +5,8 @@
     using System.Windows;
 
     using AutoMapper;
+
     using Bali.Converter.App.Modules.About.View;
-    using Bali.Converter.App.Modules.Conversion.Filters;
     using Bali.Converter.App.Modules.Conversion.Filters.ViewModels;
     using Bali.Converter.App.Modules.Conversion.Filters.Views;
     using Bali.Converter.App.Modules.Conversion.Video.View;
@@ -25,9 +25,10 @@
     using Bali.Converter.App.ViewModels;
     using Bali.Converter.App.Workers;
     using Bali.Converter.Common.Conversion;
+    using Bali.Converter.Common.Media;
     using Bali.Converter.FFmpeg;
     using Bali.Converter.YoutubeDl;
-
+    using LiteDB;
     using log4net;
     using log4net.Config;
 
@@ -43,6 +44,15 @@
             var repository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
 
+            var file = new FileInfo(Path.Combine(IConfigurationService.ApplicationDataPath, "Data", "Storage.db"));
+
+            if (file.Directory is { Exists: false })
+            {
+                file.Directory.Create();
+            }
+
+            ILiteDatabase database = new LiteDatabase(file.FullName);
+
             IYoutubeDl youtubedl = new YoutubeDl(@"Tools\youtube-dl.exe", @"Tools\ffmpeg.exe", IConfigurationService.TempPath);
             var mapper = new MapperConfiguration(configuration => configuration.AddProfile<AutoMapperProfile>()).CreateMapper();
 
@@ -50,10 +60,11 @@
 
             containerRegistry.RegisterInstance(DialogCoordinator.Instance);
             containerRegistry.RegisterInstance(youtubedl);
+            containerRegistry.RegisterInstance(database);
             containerRegistry.RegisterInstance(ffmpeg);
             containerRegistry.RegisterInstance(mapper);
             containerRegistry.RegisterSingleton<IConfigurationService, ConfigurationService>();
-            containerRegistry.RegisterSingleton<IDownloadRegistry, DownloadRegistry>();
+            containerRegistry.RegisterSingleton<IDownloadRegistryService, DownloadRegistryService>();
 
             containerRegistry.RegisterForNavigation<MediaDownloaderView, MediaDownloaderViewModel>();
             containerRegistry.RegisterForNavigation<SingleMediaEditorView, SingleMediaEditorViewModel>();
