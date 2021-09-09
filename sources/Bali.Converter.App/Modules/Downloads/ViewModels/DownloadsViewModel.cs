@@ -72,6 +72,11 @@
 
         private void ClearDownloadList()
         {
+            if (this.IsDownloadsEmpty)
+            {
+                return;
+            }
+
             foreach (var job in this.DownloadJobs)
             {
                 this.downloadRegistry.Remove(job.Id);

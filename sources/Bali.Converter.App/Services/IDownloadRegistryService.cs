@@ -11,7 +11,7 @@
         public event EventHandler<DownloadEventArgs> DownloadJobAdded;
         public event EventHandler<DownloadEventArgs> DownloadJobRemoved;
 
-        IReadOnlyCollection<DownloadJob> All { get; }
+        List<DownloadJob> All { get; }
 
         Task<DownloadJob> Get();
 

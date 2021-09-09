@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Security.Cryptography.Pkcs;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -15,42 +15,37 @@
     public class DownloadRegistryService : IDownloadRegistryService
     {
         private readonly ILiteCollection<DownloadJob> collection;
-        private readonly ILiteDatabase database;
         private readonly ILog logger;
         private readonly SemaphoreSlim semaphore;
 
         public DownloadRegistryService(ILiteDatabase database)
         {
             this.logger = LogManager.GetLogger(typeof(DownloadRegistryService));
-            this.database = database;
 
-            this.collection = this.database.GetCollection<DownloadJob>();
-
+            this.collection = database.GetCollection<DownloadJob>();
             this.semaphore = new SemaphoreSlim(this.collection.Query().Where(x => x.State == DownloadState.Downloading || x.State == DownloadState.Pending).Count());
+
+            this.All = this.collection.Query().ToList();
         }
 
         public event EventHandler<DownloadEventArgs> DownloadJobAdded;
         public event EventHandler<DownloadEventArgs> DownloadJobRemoved;
 
-        public IReadOnlyCollection<DownloadJob> All
-        {
-            get => this.collection.Query().ToArray();
-        }
+        public List<DownloadJob> All { get; private set; }
 
         public async Task<DownloadJob> Get()
         {
             await this.semaphore.WaitAsync();
 
             // TODO Maybe order by index or something
-            return this.collection
-                       .Query()
-                       .FirstOrDefault();
+            return this.All.FirstOrDefault();
         }
 
         public void Add(DownloadJob job)
         {
             this.logger.Info($"Registering [{job.Id}]");
             this.collection.Insert(job);
+            this.All.Add(job);
 
             this.OnDownloadJobAdded(new DownloadEventArgs(job));
         }
@@ -60,7 +55,10 @@
             this.logger.Info($"Removing [{id}]");
             this.collection.Delete(id);
 
-            // this.OnDownloadJobRemoved(new DownloadEventArgs());
+            var found = this.All.FirstOrDefault(j => j.Id == id);
+            this.All.Remove(found);
+
+            this.OnDownloadJobRemoved(new DownloadEventArgs(found));
         }
 
         protected virtual void OnDownloadJobAdded(DownloadEventArgs e)
