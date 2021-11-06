@@ -18,5 +18,7 @@
         void Add(DownloadJob job);
 
         void Remove(int id);
+
+        void Complete(int id);
     }
 }

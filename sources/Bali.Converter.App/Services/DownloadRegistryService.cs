@@ -61,6 +61,20 @@
             this.OnDownloadJobRemoved(new DownloadEventArgs(found));
         }
 
+        public void Complete(int id)
+        {
+            this.logger.Info($"Completing [{id}]");
+
+            var found = this.All.FirstOrDefault(j => j.Id == id);
+
+            if (found != null)
+            {
+                found.State = DownloadState.Completed;
+
+                this.collection.Update(found);
+            }
+        }
+
         protected virtual void OnDownloadJobAdded(DownloadEventArgs e)
         {
             this.logger.Info($"Download job added: {e.Job.Id}");

@@ -15,14 +15,24 @@
         public event DownloadStateChangedEventHandler DownloadStateChanged;
         public event DownloadProgressChangedEventHandler DownloadProgressChanged;
 
+        public DownloadJob()
+        {
+            this.State = DownloadState.Pending;
+        }
+
+        [BsonId]
         public int Id { get; set; }
 
+        [BsonField]
         public string Url { get; set; }
 
+        [BsonField]
         public FileExtension TargetFormat { get; set; }
 
+        [BsonField]
         public string ThumbnailPath { get; set; }
 
+        [BsonField]
         public DownloadState State
         {
             get => this.state;

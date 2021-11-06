@@ -28,7 +28,8 @@
                        Visibility="{Binding IsDownloadsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
             <Button Grid.Row="0" HorizontalAlignment="Left" Content="Clear" Width="150" Margin="0 0 0 10"
-                    Command="{Binding ClearDownloadListCommand}" />
+                    Command="{Binding ClearDownloadListCommand}"
+                    Visibility="{Binding HasDownloads, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
             <ItemsControl Grid.Row="1" ItemsSource="{Binding DownloadJobs}">
                 <ItemsControl.ItemsPanel>

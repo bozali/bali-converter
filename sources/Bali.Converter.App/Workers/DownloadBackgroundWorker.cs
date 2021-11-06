@@ -5,7 +5,7 @@
     using System.Net.Mime;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Xml.Serialization;
+
     using Bali.Converter.App.Events;
     using Bali.Converter.App.Modules.Downloads;
     using Bali.Converter.App.Services;
@@ -23,15 +23,16 @@
 
     public class DownloadBackgroundWorker
     {
-        private readonly ILog logger = LogManager.GetLogger(Constants.DownloadServiceLogger);
         private readonly IConfigurationService configurationService;
         private readonly IDownloadRegistryService downloadRegistry;
         private readonly IYoutubeDl youtubedl;
+        private readonly ILog logger;
 
         public DownloadBackgroundWorker(IConfigurationService configurationService,
                                         IDownloadRegistryService downloadRegistry,
                                         IYoutubeDl youtubedl)
         {
+            this.logger = LogManager.GetLogger(Constants.DownloadServiceLogger);
             this.configurationService = configurationService;
             this.downloadRegistry = downloadRegistry;
             this.youtubedl = youtubedl;
@@ -67,7 +68,7 @@
                     void OnDownloadStateChanged(object s, DownloadStateChangedEventArgs e)
                     {
                         // ReSharper disable once AccessToDisposedClosure
-                        if (e.State == DownloadState.Canceled && cts is {IsCancellationRequested: false})
+                        if (e.State == DownloadState.Canceled && cts is { IsCancellationRequested: false })
                         {
                             this.logger.Info($"Requesting cancellation for {job.Id}");
                             cts?.Cancel();
@@ -124,7 +125,7 @@
 
                     File.Move(downloadPath, destinationPath);
 
-                    // TODO this.downloadRegistry.Complete(job);
+                    this.downloadRegistry.Complete(job.Id);
 
                     job.DownloadStateChanged -= OnDownloadStateChanged;
                 }

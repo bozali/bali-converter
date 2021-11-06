@@ -116,14 +116,14 @@
             using var process = new ProcessWrapper(this.youtubedl);
 
             var handler = new DataReceivedEventHandler((s, e) =>
-            {
-                string extracted = YoutubeDl.ExtractFilePath(e.Data);
+                                                       {
+                                                           string extracted = YoutubeDl.ExtractFilePath(e.Data);
 
-                if (!string.IsNullOrEmpty(extracted))
-                {
-                    infoFileName = extracted;
-                }
-            });
+                                                           if (!string.IsNullOrEmpty(extracted))
+                                                           {
+                                                               infoFileName = extracted;
+                                                           }
+                                                       });
 
             process.OutputDataReceived += handler;
 

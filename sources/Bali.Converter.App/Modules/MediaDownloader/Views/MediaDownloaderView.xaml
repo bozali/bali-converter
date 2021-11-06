@@ -16,12 +16,12 @@
              Style="{DynamicResource MetroPage}">
 
     <Grid Margin="15">
-        <StackPanel Orientation="Vertical" >
-            <mah:MetroHeader Margin="0 10 0 0" Header="Download Url">
+        <StackPanel Orientation="Vertical">
+            <mah:MetroHeader Margin="0 0 0 10" Header="Download Url">
                 <TextBox Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" />
             </mah:MetroHeader>
 
-            <mah:MetroHeader Margin="0 10 0 0" Header="Target Format">
+            <mah:MetroHeader Margin="0 0 0 10" Header="Target Format">
                 <ComboBox HorizontalAlignment="Left" Width="200" SelectedValue="{Binding Format}"
                           SelectedValuePath="Content" SelectedIndex="1">
                     <ComboBoxItem Content="MP3" />
@@ -40,7 +40,7 @@
                 </ComboBox>
             </mah:MetroHeader>
 
-            <Expander Header="Quality" Margin="0 25 0 0" Padding="8" IsExpanded="True">
+            <Expander Header="Quality" Margin="0 0 0 10" Padding="8" IsExpanded="False">
                 <StackPanel>
                     <!-- Quality information box -->
                     <Border Padding="8"

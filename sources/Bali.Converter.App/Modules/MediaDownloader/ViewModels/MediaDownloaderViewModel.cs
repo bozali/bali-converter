@@ -31,12 +31,11 @@
 
     public class MediaDownloaderViewModel : BindableBase, INavigationAware
     {
-        private readonly ILog logger = LogManager.GetLogger(Constants.ApplicationLogger);
-
         private readonly IRegionManager regionManager;
         private readonly IDownloadRegistryService downloadRegistry;
         private readonly IDialogCoordinator dialog;
         private readonly IYoutubeDl youtubedl;
+        private readonly ILog logger;
 
         private AutomaticQualityOption audioQualityOption;
         private AutomaticQualityOption videoQualityOption;
@@ -50,6 +49,8 @@
                                         IDialogCoordinator dialog,
                                         IYoutubeDl youtubedl)
         {
+            this.logger = LogManager.GetLogger(Constants.ApplicationLogger);
+
             this.regionManager = regionManager;
             this.downloadRegistry = downloadRegistry;
             this.dialog = dialog;
@@ -147,7 +148,7 @@
                 if (this.IsPlaylist && this.ProceedAsPlaylist)
                 {
                     var videos = await this.youtubedl.GetVideos(this.Url);
-
+                
                     foreach (var video in videos)
                     {
                         await this.RegisterJob(video);
@@ -158,8 +159,8 @@
                     var video = await this.youtubedl.GetVideo(this.Url);
                     await this.RegisterJob(video);
                 }
-
-                this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(MediaDownloaderView));
+                
+                this.regionManager.RequestNavigate("ContentRegion", nameof(MediaDownloaderView));
             }
             catch (Exception e)
             {
@@ -174,7 +175,7 @@
         private async Task Edit()
         {
             var controller = await this.dialog.ShowProgressAsync(this, "Progress", "Please wait a second...");
-
+            
             try
             {
                 if (this.IsPlaylist && this.ProceedAsPlaylist)
@@ -190,7 +191,7 @@
                     var parameters = new NavigationParameters();
                     parameters.Add("Videos", videos);
 
-                    this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(PlaylistSelectionView), parameters);
+                    this.regionManager.RequestNavigate("ContentRegion", nameof(PlaylistSelectionView), parameters);
                 }
                 else
                 {
@@ -202,7 +203,7 @@
                     parameters.Add("VideoQuality", this.VideoQualityOption);
                     parameters.Add("AudioQuality", this.AudioQualityOption);
 
-                    this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(SingleMediaEditorView), parameters);
+                    this.regionManager.RequestNavigate("ContentRegion", nameof(SingleMediaEditorView), parameters);
                 }
             }
             catch (Exception e)
@@ -235,12 +236,12 @@
 
         private async Task<VideoViewModel> ConvertVideoResource(Video video)
         {
-            var thumbnail = await this.DownloadThumbnail(video);
+            (string path, byte[] data) = await this.DownloadThumbnail(video);
 
             return new VideoViewModel
             {
-                ThumbnailPath = thumbnail.Path,
-                ThumbnailData = thumbnail.Data,
+                ThumbnailPath = path,
+                ThumbnailData = data,
                 Format = this.Format,
                 Url = video.Url,
                 Tags = new MediaTagsViewModel

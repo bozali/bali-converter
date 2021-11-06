@@ -53,6 +53,11 @@
             get => !this.DownloadJobs.Any();
         }
 
+        public bool HasDownloads
+        {
+            get => this.DownloadJobs.Any();
+        }
+
         private void OnDownloadJobAdded(object sender, DownloadEventArgs e)
         {
             this.DownloadJobs.Add(new DownloadJobViewModel(e.Job));
@@ -61,12 +66,17 @@
         private void OnDownloadJobRemoved(object sender, DownloadEventArgs e)
         {
             var found = this.DownloadJobs.FirstOrDefault(i => i.Id == e.Job.Id);
-            this.DownloadJobs.Remove(found);
+
+            if (found != null)
+            {
+                this.DownloadJobs.Remove(found);
+            }
         }
         
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             this.RaisePropertyChanged(nameof(this.DownloadJobs));
+            this.RaisePropertyChanged(nameof(this.HasDownloads));
             this.RaisePropertyChanged(nameof(this.IsDownloadsEmpty));
         }
 
@@ -77,10 +87,10 @@
                 return;
             }
 
-            foreach (var job in this.DownloadJobs)
-            {
-                this.downloadRegistry.Remove(job.Id);
-            }
+            var ids = this.DownloadJobs.Select(x => x.Id);
+
+            this.DownloadJobs.Clear();
+            ids.ForEach(id => this.downloadRegistry.Remove(id));
         }
     }
 }

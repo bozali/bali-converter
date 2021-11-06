@@ -2,14 +2,14 @@
 {
     public enum DownloadState
     {
-        Downloading,
+        Pending,
 
-        Paused,
+        Downloading,
 
         Canceled,
 
-        Pending,
+        Paused,
 
-        Completed
+        Completed,
     }
 }
