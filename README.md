@@ -2,7 +2,7 @@
 
 A wrapper around ffmpeg and youtube-dl with nice UI. 
 
-It is still under development and will probably take still some time. If you want to support you can donate https://www.paypal.com/donate?hosted_button_id=N6EKSA3QGMNSU.
+It is still under development and will probably take still some time. If you want to support you can  [donate](https://www.paypal.com/donate?hosted_button_id=N6EKSA3QGMNSU).
 
 ## !IMPORTANT This project is still in development
 
