@@ -2,7 +2,7 @@
 {
     using Bali.Converter.App.Events;
     using Bali.Converter.Common.Media;
-
+    using MahApps.Metro.IconPacks;
     using Prism.Commands;
     using Prism.Mvvm;
 
@@ -72,6 +72,24 @@
         public MediaTags Tags
         {
             get => this.job.Tags;
+        }
+
+        public PackIconMaterialKind Icon
+        {
+            get
+            {
+                switch (this.job.State)
+                {
+                    case DownloadState.Pending:
+                        return PackIconMaterialKind.HumanQueue;
+
+                    case DownloadState.Downloading:
+                        return PackIconMaterialKind.Download;
+
+                    default:
+                        return PackIconMaterialKind.Check;
+                }
+            }
         }
 
         private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

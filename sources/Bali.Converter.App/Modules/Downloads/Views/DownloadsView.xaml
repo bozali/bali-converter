@@ -7,6 +7,7 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:vm="clr-namespace:Bali.Converter.App.Modules.Downloads.ViewModels"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:DownloadsViewModel}" 
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="450" d:DesignWidth="800"
@@ -84,7 +85,16 @@
                                     <Button Content="Cancel" Width="150" Command="{Binding RequestCancelCommand}" />
                                 </StackPanel>
 
-                                <mah:MetroHeader Margin="0 10 0 10" Grid.Row="3" Header="{Binding ProgressText}" />
+                                <Grid Grid.Row="3" Margin="0 10 0 10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+
+                                    <icon:PackIconMaterial VerticalAlignment="Center" Margin="0 0 10 0" Grid.Column="0" Kind="{Binding Icon}" />
+                                    <mah:MetroHeader VerticalAlignment="Center" Grid.Column="1" Header="{Binding ProgressText}" />
+                                </Grid>
 
                                 <Grid Grid.Row="4" HorizontalAlignment="Left" Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <Grid.ColumnDefinitions>

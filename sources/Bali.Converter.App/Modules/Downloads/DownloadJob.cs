@@ -6,6 +6,8 @@
 
     using LiteDB;
 
+    using MahApps.Metro.IconPacks;
+
     public class DownloadJob
     {
         private float progress;
