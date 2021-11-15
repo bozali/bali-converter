@@ -6,8 +6,6 @@
 
     using LiteDB;
 
-    using MahApps.Metro.IconPacks;
-
     public class DownloadJob
     {
         private float progress;
@@ -47,6 +45,7 @@
             }
         }
 
+        [BsonField]
         public MediaTags Tags { get; set; }
 
         [BsonIgnore]

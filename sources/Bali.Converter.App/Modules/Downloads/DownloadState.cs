@@ -4,6 +4,8 @@
     {
         Pending,
 
+        Fetching,
+
         Downloading,
 
         Canceled,

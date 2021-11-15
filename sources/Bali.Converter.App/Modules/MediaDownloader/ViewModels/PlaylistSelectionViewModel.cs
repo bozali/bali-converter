@@ -98,7 +98,7 @@
         {
             foreach (var video in this.Videos.Where(v => v.IsSelected))
             {
-                this.downloadRegistry.Add(new DownloadJob
+                this.downloadRegistry.AddDownload(new DownloadJob
                 {
                     TargetFormat = Enum.Parse<FileExtension>(video.Format, true),
                     Tags = this.mapper.Map<MediaTags>(video.Tags),

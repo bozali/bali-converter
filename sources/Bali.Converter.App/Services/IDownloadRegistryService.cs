@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using Bali.Converter.App.Modules.Downloads;
+    using Bali.Converter.Common.Enums;
 
     public interface IDownloadRegistryService
     {
@@ -13,9 +14,15 @@
 
         List<DownloadJob> All { get; }
 
-        Task<DownloadJob> Get();
+        Task<DownloadJob> GetDownload();
 
-        void Add(DownloadJob job);
+        Task<DownloadJob> GetFetch();
+
+        void AddFetch(string url, FileExtension targetFormat);
+
+        void AddDownload(DownloadJob job);
+
+        void DownloadFetched(DownloadJob job);
 
         void Remove(int id);
 

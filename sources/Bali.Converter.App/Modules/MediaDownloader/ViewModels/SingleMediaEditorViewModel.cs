@@ -77,7 +77,7 @@
                 TargetFormat = Enum.Parse<FileExtension>(this.Video.Format, true)
             };
 
-            this.downloadRegistry.Add(job);
+            this.downloadRegistry.AddDownload(job);
 
             this.regionManager.Regions["ContentRegion"].NavigationService.Journal.Clear();
             this.regionManager.Regions["ContentRegion"].RequestNavigate(nameof(MediaDownloaderView));

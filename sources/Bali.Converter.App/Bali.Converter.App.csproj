@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Assets\Images\" />
-    <Folder Include="Jobs\" />
     <Folder Include="Tools\" />
   </ItemGroup>
 

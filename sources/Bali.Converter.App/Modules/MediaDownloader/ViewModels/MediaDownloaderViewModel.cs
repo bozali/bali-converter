@@ -147,8 +147,9 @@
             {
                 if (this.IsPlaylist && this.ProceedAsPlaylist)
                 {
+                    // TODO We need to add functionality to fetch playlist
                     var videos = await this.youtubedl.GetVideos(this.Url);
-                
+                    
                     foreach (var video in videos)
                     {
                         await this.RegisterJob(video);
@@ -156,8 +157,10 @@
                 }
                 else
                 {
-                    var video = await this.youtubedl.GetVideo(this.Url);
-                    await this.RegisterJob(video);
+                    this.downloadRegistry.AddFetch(this.Url, Enum.Parse<FileExtension>(this.Format, true));
+
+                    // var video = await this.youtubedl.GetVideo(this.Url);
+                    // await this.RegisterJob(video);
                 }
                 
                 this.regionManager.RequestNavigate("ContentRegion", nameof(MediaDownloaderView));
@@ -231,7 +234,7 @@
                 }
             };
 
-            this.downloadRegistry.Add(job);
+            this.downloadRegistry.AddDownload(job);
         }
 
         private async Task<VideoViewModel> ConvertVideoResource(Video video)

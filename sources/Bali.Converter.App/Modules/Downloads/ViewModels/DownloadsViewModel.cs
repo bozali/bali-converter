@@ -89,7 +89,6 @@
 
             var ids = this.DownloadJobs.Select(x => x.Id);
 
-            this.DownloadJobs.Clear();
             ids.ForEach(id => this.downloadRegistry.Remove(id));
         }
     }

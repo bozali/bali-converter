@@ -102,7 +102,9 @@
         {
             base.OnInitialized();
 
+            // TODO Pass cancellation tokens
             this.Container.Resolve<DownloadBackgroundWorker>().Process().ConfigureAwait(false);
+            this.Container.Resolve<FetchBackgroundWorker>().Process().ConfigureAwait(false);
         }
     }
 }

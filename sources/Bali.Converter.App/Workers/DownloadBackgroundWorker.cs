@@ -46,7 +46,7 @@
 
                 try
                 {
-                    job = await this.downloadRegistry.Get();
+                    job = await this.downloadRegistry.GetDownload();
 
                     // Skipping empty item. If we have releases but not enough jobs that are not cancelled.
                     if (job == null)
@@ -60,6 +60,8 @@
                     {
                         continue;
                     }
+
+                    job.State = DownloadState.Downloading;
 
                     // Create a token to cancel if it was requested while downloading the resource.
                     using var cts = new CancellationTokenSource();

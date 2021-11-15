@@ -22,9 +22,10 @@
         {
             this.job = job;
             this.job.DownloadProgressChanged += this.OnDownloadProgressChanged;
+            this.job.DownloadStateChanged += this.OnDownloadStateChanged;
 
             this.ProgressText = this.job.State.ToString("G");
-            this.HeaderText = this.job.Tags.Title;
+            this.HeaderText = this.job.Tags == null ? this.job.Url : this.job.Tags.Title;
             this.Progress = job.Progress;
             this.Url = this.job.Url;
             this.Id = this.job.Id;
@@ -96,6 +97,19 @@
         {
             this.Progress = e.Progress;
             this.ProgressText = e.Text;
+
+            this.RaisePropertyChanged(nameof(this.Icon));
+        }
+
+        private void OnDownloadStateChanged(object s, DownloadStateChangedEventArgs e)
+        {
+            if (e.State == DownloadState.Pending || e.State == DownloadState.Downloading)
+            {
+                // Update the data if we changed the state to Downloading or Pending
+                this.HeaderText = this.job.Tags.Title;
+
+                this.RaisePropertyChanged(nameof(this.Tags));
+            }
         }
     }
 }
