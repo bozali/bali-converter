@@ -2,9 +2,9 @@ name: .NET
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ balc-41-build-automation ]
   pull_request:
-    branches: [ dev ]
+    branches: [ balc-41-build-automation ]
 
 jobs:
   build:
